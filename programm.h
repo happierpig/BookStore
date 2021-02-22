@@ -31,6 +31,7 @@ string deleteQuo(string origin){
 }
 
 void parseStatement(string order){
+    if(order.empty()) return;
     stringstream sentence;sentence.clear();sentence.str(order);
     int tokencount = 1;
 

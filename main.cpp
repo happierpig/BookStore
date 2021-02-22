@@ -16,7 +16,7 @@ int main() {
             return 0;
         }
         catch (...) {
-            cout << token << endl;
+//            cout << token << endl;
             cout << "Invalid" << endl;
         }
     }
