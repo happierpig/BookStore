@@ -148,6 +148,7 @@ namespace ULL {
                     temp.EleNum++;
                     temp.content[0] = ele;
                     OrinFile.seekp(count1);OrinFile.write(r_cast(temp),BlockSize);
+                    OrinFile.close();
                     return;
                 }
             }
@@ -209,10 +210,11 @@ namespace ULL {
                 count2++;
                 if(count2 == temp.EleNum) break;
             }
-            if(count2 == temp.EleNum - 1) temp.content[count2] = Element();
+//            if(count2 == temp.EleNum - 1) temp.content[count2] = Element();
             for(int i = count2;i < temp.EleNum - 1;i++){
                 temp.content[i] = temp.content[i+1];
             }
+            temp.content[temp.EleNum-1] = Element();
             temp.EleNum--;
             OrinFile.seekp(count1);OrinFile.write(r_cast(temp),BlockSize);
             if(temp.NexPtr != -1){
