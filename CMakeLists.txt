@@ -3,6 +3,7 @@ project(src)
 
 set(CMAKE_CXX_STANDARD 14)
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+
 include_directories(
         ${PROJECT_SOURCE_DIR}/src/
 
