@@ -19,7 +19,7 @@ ULL::UnrolledLinkedList<30> userID_ULL("userID_ULL.dat");
 stack<pair<string,int>> OnlineUser;
 
 string deleteQuo(string origin){
-//      cout << origi    n << e ndl;
+//      cout << origin << e ndl;
     if(origin[0] == '"') {
         string temp = origin;
         for (int i = 0; i < origin.size() - 2; ++i) temp[i] = origin[i + 1];
@@ -31,7 +31,6 @@ string deleteQuo(string origin){
 }
 
 void parseStatement(string order){
-    if(order.empty()) return;
     stringstream sentence;sentence.clear();sentence.str(order);
     int tokencount = 1;
 

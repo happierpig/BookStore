@@ -7,7 +7,7 @@
 using namespace std;
 int main() {
     initialize();
-//      fstream fi n( "5.txt");
+//    fstream fin("5.txt");
     string token;
     while(getline(cin,token)){
         try {
