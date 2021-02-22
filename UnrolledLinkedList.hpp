@@ -20,7 +20,7 @@ namespace ULL {
     public:
         struct Element{
             friend UnrolledLinkedList<KeyLength>;
-            char key[KeyLength+1]; int MemPos; //该key所对应的内容在文件中的位置
+            char key[KeyLength+1]; int MemPos; //该key所 对应的内容在文件中的位置
             Element(){ MemPos = -1; memset(key,'0',sizeof(key));}
 
             Element(std::string o,int x):MemPos(x){
