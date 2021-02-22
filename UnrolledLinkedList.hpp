@@ -53,7 +53,7 @@ namespace ULL {
         class Block{
             friend UnrolledLinkedList<KeyLength>;
         private:
-            int EleNum,NexPtr,BePtr; //指针指向下一个块
+            int EleNum,NexPtr,BePtr; //指针 指向下一个块
         public:
             Element content[MaxEleNum];
             Block():EleNum(0),NexPtr(-1),BePtr(-1){}
