@@ -54,9 +54,9 @@ extern ULL::UnrolledLinkedList<60> keyword_ULL;
             return strcmp(this->ISBN,o.ISBN) < 0;
         }
         friend ostream & operator << (ostream & os,const Book & book){
-            os << book.ISBN << ' ' << book.name << ' ' << book.author << ' ' << book.keyword << ' ';
+            os << book.ISBN << '\t' << book.name << '\t' << book.author << '\t' << book.keyword << '\t';
             printf("%0.2f",book.price);
-            os << ' ' << book.quantity;
+            os << '\t' << book.quantity;
             return os;
         }
     };
