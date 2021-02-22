@@ -33,7 +33,11 @@ namespace ULL {
             }
 
             bool operator < (const Element & o) const{
-                return strcmp(this->key,o.key) < 0;
+                if(strcmp(this->key,o.key) < 0){
+                    return true;
+                }else if(strcmp(this->key,o.key) > 0){
+                    return false;
+                }else return this->MemPos < o.MemPos;
             }
 
             bool operator == (const Element & o ) const {
@@ -67,6 +71,7 @@ namespace ULL {
     private:
 
         int NextBlock(const int position){
+            if(!OrinFile.is_open()){OrinFile.open(OrinFileName,std::fstream::binary | std::fstream::in | std::fstream::out);}
             OrinFile.seekp(position + sizeof(int));
             int next = -1;OrinFile.read(r_cast(next),sizeof(int));
             return next;
@@ -103,6 +108,7 @@ namespace ULL {
                 OrinFile.seekp(temp.NexPtr + 2 * sizeof(int));
                 OrinFile.write(r_cast(temppos),sizeof(int));
             }
+
             for(int i = 0 ; i < temp.EleNum;++i){
                 temp.content[i] = origin.content[origin.EleNum + i];
             }
@@ -212,7 +218,7 @@ namespace ULL {
                 OrinFile.read(r_cast(nextNum),sizeof(int));
                 if(temp.EleNum + nextNum < MergeBoundary) MergeBlock(count1);
             }else if(temp.EleNum == 0 && temp.BePtr != -1){
-                OrinFile.seekp(temp.BePtr + 2 * sizeof(int));
+                OrinFile.seekp(temp.BePtr + sizeof(int));
                 int k = -1;
                 OrinFile.write(r_cast(k),sizeof(int));
             }
