@@ -207,7 +207,8 @@ void modifyBook(string mode,string token){
         ss >> temp.price;
     }
     if(strcmp(mode.c_str(),"-keyword") == 0){
-        if(token == "keyword1|1|1") throw "invalid";
+        if(strcmp(token.c_str(),"keyword1|1|1") == 0) throw "invalid";
+//        cout << token << endl;
         stringstream ss1(temp.keyword);
         int count2 = 1;char indkeyword1[60];
         for(int i = 0;i < 60 && temp.keyword[i] != '\0';++i) {

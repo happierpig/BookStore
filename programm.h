@@ -19,10 +19,11 @@ ULL::UnrolledLinkedList<30> userID_ULL("userID_ULL.dat");
 stack<pair<string,int>> OnlineUser;
 
 string deleteQuo(string origin){
+//    cout << origin << endl;
     if(origin[0] == '"') {
         string temp = origin;
         for (int i = 0; i < origin.size() - 2; ++i) temp[i] = origin[i + 1];
-        temp[origin.size() - 2] = '\0';
+        temp[origin.size() - 2] = '\0';temp[origin.size() - 1] = '\0';temp[origin.size()] = '\0';
         return temp;
     }else{
         return origin;
