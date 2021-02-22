@@ -87,11 +87,11 @@ void parseStatement(string order){
     if(token1 == "passwd"){
         if(tokencount == 3){
             sentence >> token1 >> token2;
-            changePasswd(token1.c_str(),"",token2.c_str());
+            changePasswd(token1,"[wrong]",token2);
             return;
         }else if(tokencount == 4){
             sentence >> token1 >> token2 >> token3;
-            changePasswd(token1.c_str(),token2.c_str(),token3.c_str());
+            changePasswd(token1,token2,token3);
             return;
         }
         throw "Invalid";

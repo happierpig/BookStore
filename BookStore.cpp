@@ -62,6 +62,7 @@ void su(string _userID,string _passwd){
             OnlineUser.push(make_pair(_userID,-1));
             return;
         }
+        throw "wrong passwd";
     }
 }
 
@@ -103,7 +104,11 @@ void changePasswd(string _userID,string _oldpasswd,string _newpasswd){
     vector<int> vec_ans;userID_ULL.FindOffset(_userID,vec_ans);
     if(vec_ans.empty()) throw "404 not found";
     User temp = getUser(_userID);
-    if(strcmp(_oldpasswd.c_str(),temp.passwd) == 0 || online.privilege == 7){
+    if(online.privilege == 7){
+        if(_oldpasswd == "[wrong]"){strcpy(temp.passwd,_newpasswd.c_str());}
+        else if(strcmp(_oldpasswd.c_str(),temp.passwd) == 0){strcpy(temp.passwd,_newpasswd.c_str());}
+        else throw "invalid";
+    }else if(strcmp(_oldpasswd.c_str(),temp.passwd) == 0){
         strcpy(temp.passwd,_newpasswd.c_str());
     }else{
         throw "wrong passwd";
@@ -211,7 +216,7 @@ void modifyBook(string mode,string token){
             ss1.getline(indkeyword1,60,'|');
             keyword_ULL.DeleteElement(ULL::UnrolledLinkedList<60>::Element(indkeyword1,position));
         }
-
+//todo
         strcpy(temp.keyword,token.c_str());
         stringstream ss(token);
         int count = 1;char indkeyword[60];
