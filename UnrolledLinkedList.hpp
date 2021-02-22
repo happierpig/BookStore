@@ -20,7 +20,7 @@ namespace ULL {
     public:
         struct Element{
             friend UnrolledLinkedList<KeyLength>;
-            char key[KeyLength+1]; int MemPos; //该key所对应的内容在文件中的位置
+            char key[KeyLength+1]; int MemPos; //该key所   对应的内容在文件中的位置
             Element(){ MemPos = -1; memset(key,'0',sizeof(key));}
 
             Element(std::string o,int x):MemPos(x){
@@ -73,6 +73,7 @@ namespace ULL {
         }
 
         void MergeBlock(int position){
+            if(!OrinFile.is_open()){OrinFile.open(OrinFileName,std::fstream::binary | std::fstream::in | std::fstream::out);}
             Block first,second;
             OrinFile.seekp(position);OrinFile.read(r_cast(first),BlockSize);
             OrinFile.seekp(NextBlock(position));OrinFile.read(r_cast(second),BlockSize);
@@ -86,9 +87,11 @@ namespace ULL {
                 first.content[i] = second.content[i-first.EleNum];
             }
             OrinFile.seekp(position);OrinFile.write(r_cast(first),BlockSize);
+            OrinFile.close();
         }
 
         void SplitBlock(const int position){
+            if(!OrinFile.is_open()){OrinFile.open(OrinFileName,std::fstream::binary | std::fstream::in | std::fstream::out);}
             Block origin,temp;
             OrinFile.seekp(position);
             OrinFile.read(r_cast(origin),BlockSize);
@@ -106,6 +109,7 @@ namespace ULL {
 
             OrinFile.seekp(position);OrinFile.write(r_cast(origin),BlockSize);
             OrinFile.seekp(temppos);OrinFile.write(r_cast(temp),BlockSize);
+            OrinFile.close();
         }
 
     public:
@@ -122,6 +126,7 @@ namespace ULL {
         }
 
         void addElement(const Element & ele){
+            if(!OrinFile.is_open()){OrinFile.open(OrinFileName,std::fstream::binary | std::fstream::in | std::fstream::out);}
             OrinFile.seekp(0,std::ios::end);int count1,count2;
             count1 = OrinFile.tellp();
             Block temp;Element ind;
@@ -166,9 +171,11 @@ namespace ULL {
             if(temp.EleNum == MaxEleNum){
                 SplitBlock(count1);
             }
+            OrinFile.close();
         }
 
         void DeleteElement(const Element & ele){
+            if(!OrinFile.is_open()){OrinFile.open(OrinFileName,std::fstream::binary | std::fstream::in | std::fstream::out);}
             OrinFile.seekp(0,std::ios::end);int count1,count2;
             count1 = OrinFile.tellp();
             Block temp;Element ind;
@@ -209,9 +216,11 @@ namespace ULL {
                 int k = -1;
                 OrinFile.write(r_cast(k),sizeof(int));
             }
+            OrinFile.close();
         }
 
         void FindOffset(std::string targetKey,std::vector<int> & vec_ans){
+            if(!OrinFile.is_open()){OrinFile.open(OrinFileName,std::fstream::binary | std::fstream::in | std::fstream::out);}
             OrinFile.seekp(0,std::ios::end);int count1,count2;
             count1 = OrinFile.tellp();
             Block temp;
@@ -232,6 +241,7 @@ namespace ULL {
                 }
                 count1 = count2;count2 = NextBlock(count1);
             }
+            OrinFile.close();
         }
 
         void PrintULL(std::vector<int> & vec_ans){
@@ -255,6 +265,7 @@ namespace ULL {
 //                count1 = NextBlock(count1);
 //            }
 //            cout << "-----Total Block Number : " << count2 << endl;
+            if(!OrinFile.is_open()){OrinFile.open(OrinFileName,std::fstream::binary | std::fstream::in | std::fstream::out);}
               OrinFile.seekp(0);
               int count = 0;
               Block temp;
@@ -266,6 +277,7 @@ namespace ULL {
                   }
                   count = NextBlock(count);
               }
+              OrinFile.close();
         }
 
     };
