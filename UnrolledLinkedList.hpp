@@ -157,8 +157,9 @@ namespace ULL {
                 if(ele < ind){
                     break;
                 }else{
+                    int temp1 = count1;
                     count1 = count2;
-                    count2 = NextBlock(count1);
+                    count2 = NextBlock(temp1);
                     continue;
                 }
             }
@@ -195,8 +196,9 @@ namespace ULL {
                 if(ele < ind){
                     break;
                 }else{
+                    int temp1 = count1;
                     count1 = count2;
-                    count2 = NextBlock(count1);
+                    count2 = NextBlock(temp1);
                     continue;
                 }
             }
@@ -230,62 +232,41 @@ namespace ULL {
             OrinFile.seekp(0,std::ios::end);int count1,count2;
             count1 = OrinFile.tellp();
             Block temp;
-            if(!count1){
-                return;
-            }
+            if(!count1){return;}
             count1 = 0; count2 = NextBlock(count1);
             while(count1 != -1){
                 OrinFile.seekp(count1);
                 OrinFile.read(r_cast(temp),BlockSize);
                 if(strcmp(temp.content[temp.EleNum-1].key,targetKey.c_str()) < 0){
-                    count1 = count2;count2 = NextBlock(count1);
+                    int temp1 = count1;
+                    count1 = count2;count2 = NextBlock(temp1);
                     continue;
                 }
                 if(strcmp(targetKey.c_str(),temp.content[0].key) < 0) return;
                 for(int i = 0;i < temp.EleNum;i++){
                     if(strcmp(temp.content[i].key,targetKey.c_str()) == 0) vec_ans.push_back(temp.content[i].MemPos);
                 }
-                count1 = count2;count2 = NextBlock(count1);
+                int temp1 = count1;
+                count1 = count2;count2 = NextBlock(temp1);
             }
             OrinFile.close();
         }
 
         void PrintULL(std::vector<int> & vec_ans){
-//            OrinFile.seekp(0,std::ios::end);int count1,count2 = 0;
-//            count1 = OrinFile.tellp();
-//            Block temp;
-//            if(!count1){
-//                cout << "-----Total Block Number : 0" << endl;
-//                return;
-//            }
-//            count1 = 0;
-//            while(count1 != -1){
-//                count2++;
-//                OrinFile.seekp(count1);
-//                OrinFile.read(r_cast(temp),BlockSize);
-//                cout << "-----Block Number : " << count2 << endl;
-//                for(int i = 0;i < temp.EleNum;++i){
-//                    cout << i << " Key : " << temp.content[i].key << endl;
-//                    cout << i << " Pos : " << temp.content[i].MemPos << endl;
-//                }
-//                count1 = NextBlock(count1);
-//            }
-//            cout << "-----Total Block Number : " << count2 << endl;
             if(!OrinFile.is_open()){OrinFile.open(OrinFileName,std::fstream::binary | std::fstream::in | std::fstream::out);}
-              OrinFile.seekp(0);
-              int count = 0;
-              Block temp;
-              while(count != -1){
-                  OrinFile.seekp(count);
-                  OrinFile.read(r_cast(temp),BlockSize);
-                  for(int i = 0;i < temp.EleNum;i++){
-                      vec_ans.push_back(temp.content[i].MemPos);
-                  }
-                  count = NextBlock(count);
+            OrinFile.seekp(0);
+            int count = 0;
+            Block temp;
+            while(count != -1){
+                OrinFile.seekp(count);
+                OrinFile.read(r_cast(temp),BlockSize);
+                for(int i = 0;i < temp.EleNum;i++){
+                    vec_ans.push_back(temp.content[i].MemPos);
+                }
+                count = NextBlock(count);
               }
-              OrinFile.close();
+            OrinFile.close();
         }
-
     };
 }
 #endif //HAPPYPIG_ULL_HPP
