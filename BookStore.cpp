@@ -7,7 +7,7 @@ User::User(const int _privilege, string _userID, string _passwd, string _name):p
     strcpy(userID,_userID.c_str());strcpy(passwd,_passwd.c_str());strcpy(name,_name.c_str());
 }
 
-void manageMoney(double number,bool mode){ // true for ben efit ; false for cost
+void manageMoney(double number,bool mode){ // true for ben  efit ; false for cost
     fstream file;file.open("FinanceData.txt",fstream::binary | fstream::in | fstream::out);
     int counter;pair<double,double> finance;
     file.read(r_cast(counter),sizeof(int));file.read(r_cast(finance),sizeof(pair<double,double>));
