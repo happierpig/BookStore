@@ -216,7 +216,7 @@ namespace ULL {
             }
             temp.content[temp.EleNum-1] = Element();
             temp.EleNum--;
-            OrinFile.seekp(count1);OrinFile.write(r_cast(temp),BlockSize);
+            OrinFile.seekp(count1,std::ios::beg);OrinFile.write(r_cast(temp),BlockSize);
             if(temp.NexPtr != -1){
                 OrinFile.seekp(temp.NexPtr);int nextNum;
                 OrinFile.read(r_cast(nextNum),sizeof(int));
