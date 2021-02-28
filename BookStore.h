@@ -25,9 +25,9 @@ extern ULL::UnrolledLinkedList<60> keyword_ULL;
 //todo:initialize
     struct User{
         int privilege = 0;
-        char userID[30] = {0};
-        char passwd[30] = {0};
-        char name[30] = {0};
+        char userID[40] = {0};
+        char passwd[40] = {0};
+        char name[40] = {0};
         User() = default;
         User(const int _privilege,string _userID,string _passwd,string _name);
     };
@@ -40,10 +40,10 @@ extern ULL::UnrolledLinkedList<60> keyword_ULL;
     void changePasswd(string _userID,string _oldpasswd,string _newpasswd);
 
     struct Book{
-        char ISBN[20] = {0};
-        char name[60] = {0};
-        char author[60] = {0};
-        char keyword[60] = {0};
+        char ISBN[30] = {0};
+        char name[70] = {0};
+        char author[70] = {0};
+        char keyword[70] = {0};
         int quantity = 0;
         double price = 0.00;
         Book() = default;

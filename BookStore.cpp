@@ -43,6 +43,9 @@ User getUser(string _userID){
 }
 
 void su(string _userID,string _passwd){
+//    if (_userID=="vE0iDoWcMu"){
+//        cout << "check" << endl ;
+//    }
     vector<int> vec_ans;userID_ULL.FindOffset(_userID,vec_ans);
     if(vec_ans.empty()) throw "blank account";
     User logging = getUser(_userID);
@@ -73,13 +76,22 @@ void logout(){
 
 void addUser(string _userID,string _passwd,int _privilege,string _name){ // privilege 7/3/1
     vector<int> vec_ans;userID_ULL.FindOffset(_userID,vec_ans);
+//    if (_userID=="vE0iDoWcMu"){
+//        cout << "check" << endl ;
+//    }
     if(!vec_ans.empty()) throw "repeated register";
     if(OnlineUser.empty()) throw "unlogged";
     User online = getUser(OnlineUser.top().first);
     if(online.privilege <= _privilege) throw "low privilege";
     User temp(_privilege,_userID,_passwd,_name);
     fstream file;file.open("userData.txt",fstream::binary | fstream::in | fstream::out | fstream::ate);
-    int MemPos = file.tellp();file.write(r_cast(temp),sizeof(User));file.close();
+    file.seekp(0,std::ios::end);
+    int MemPos = file.tellp();file.write(r_cast(temp),sizeof(User));
+//    if(_userID == "vE0iDoWcMu"){
+//        file.seekp(MemPos);file.read(r_cast(temp),sizeof(User));
+//        std::cout << temp.passwd << ' ' << temp.name;
+//    }
+    file.close();
     userID_ULL.addElement(ULL::UnrolledLinkedList<30>::Element(_userID,MemPos));
 }
 

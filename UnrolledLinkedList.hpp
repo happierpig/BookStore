@@ -136,8 +136,10 @@ namespace ULL {
                 temp.content[temp.EleNum++] = ele;
                 OrinFile.seekp(0,std::ios::beg);
                 OrinFile.write(r_cast(temp),BlockSize);
+                OrinFile.close();
                 return;
             }
+
             count1 = 0; count2 = NextBlock(count1);
             if(count2 == -1){
                 OrinFile.seekp(count1,std::ios::beg);OrinFile.read(r_cast(temp),BlockSize);
