@@ -1,9 +1,9 @@
 //
 // Created by 赵先生 on 2021/2/21.
 //
-
 #ifndef SRC_PROGRAMM_H
 #define SRC_PROGRAMM_H
+
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -19,7 +19,6 @@ ULL::UnrolledLinkedList<30> userID_ULL("userID_ULL.dat");
 stack<pair<string,int>> OnlineUser;
 
 string deleteQuo(string origin){
-//      cout << origin << e ndl;
     if(origin[0] == '"') {
         string temp = origin;
         for (int i = 0; i < origin.size() - 2; ++i) temp[i] = origin[i + 1];
@@ -38,6 +37,7 @@ void parseStatement(string order){
     for(int i = 0;i < order.size();i++){
         if(order[i] == ' ') tokencount++;
     }
+
     for(int i = order.size()-1;i>=0;i--){
         if(order[i] == ' ' ){
             tokencount--;

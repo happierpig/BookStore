@@ -22,8 +22,7 @@ extern ULL::UnrolledLinkedList<60> name_ULL;
 extern ULL::UnrolledLinkedList<60> author_ULL;
 extern ULL::UnrolledLinkedList<60> keyword_ULL;
 
-//todo:initialize
-    struct User{
+struct User{
         int privilege = 0;
         char userID[40] = {0};
         char passwd[40] = {0};
@@ -31,15 +30,15 @@ extern ULL::UnrolledLinkedList<60> keyword_ULL;
         User() = default;
         User(const int _privilege,string _userID,string _passwd,string _name);
     };
-    User getUser(string _userID);
-    void registerUser(string _userID,string _passwd,string _name);
-    void su(string _userID,string _passwd);
-    void logout();
-    void addUser(string _userID,string _passwd,int _privilege,string _name);
-    void deleteUser(string _userID);
-    void changePasswd(string _userID,string _oldpasswd,string _newpasswd);
+User getUser(string _userID);
+void registerUser(string _userID,string _passwd,string _name);
+void su(string _userID,string _passwd);
+void logout();
+void addUser(string _userID,string _passwd,int _privilege,string _name);
+void deleteUser(string _userID);
+void changePasswd(string _userID,string _oldpasswd,string _newpasswd);
 
-    struct Book{
+struct Book{
         char ISBN[30] = {0};
         char name[70] = {0};
         char author[70] = {0};
@@ -60,13 +59,14 @@ extern ULL::UnrolledLinkedList<60> keyword_ULL;
             return os;
         }
     };
-    bool isEmpty(string _isbn);
-    pair<Book,int> getBook(string _isbn);
-    void select(string _isbn);
-    void importBook(int _quantity,double _cost);
-    void buyBook(string _isbn,int _quantity);
-    void modifyBook(string mode,string token);
-    void showBook(int mode,string token = "");
-    void manageMoney(double number,bool mode);
-    void showFinance(int times);
+bool isEmpty(string _isbn);
+pair<Book,int> getBook(string _isbn);
+void select(string _isbn);
+void importBook(int _quantity,double _cost);
+void buyBook(string _isbn,int _quantity);
+void modifyBook(string mode,string token);
+void showBook(int mode,string token = "");
+void manageMoney(double number,bool mode);
+void showFinance(int times);
+
 #endif //SRC_USER_H

@@ -161,7 +161,6 @@ void select(string _isbn){
     }
 }
 
-//todo
 void importBook(int _quantity,double _cost){
     if(OnlineUser.empty()) throw "unlogged";
     if(getUser(OnlineUser.top().first).privilege < 3) throw "low privilige";
@@ -174,7 +173,7 @@ void importBook(int _quantity,double _cost){
     file.seekp(position);file.write(r_cast(temp),sizeof(Book));file.close();
     manageMoney(_cost,false);
 }
-//todo
+
 void buyBook(string _isbn,int _quantity){
     if(OnlineUser.empty()) throw "unlogged";
     if(getUser(OnlineUser.top().first).privilege < 1) throw "low privilige";
@@ -229,7 +228,6 @@ void modifyBook(string mode,string token){
             ss1.getline(indkeyword1,60,'|');
             keyword_ULL.DeleteElement(ULL::UnrolledLinkedList<60>::Element(indkeyword1,position));
         }
-//todo
         strcpy(temp.keyword,token.c_str());
         stringstream ss(token);
         int count = 1;char indkeyword[60];

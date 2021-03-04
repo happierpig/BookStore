@@ -5,8 +5,8 @@
 #include <cstring>
 #include <vector>
 #include <iostream>
-
 #define r_cast(x) reinterpret_cast<char *>(&x)
+
 using std::cout;
 using std::endl;
 namespace ULL {
@@ -124,9 +124,11 @@ namespace ULL {
                 OrinFile.open(OrinFileName,std::fstream::binary | std::fstream::in | std::fstream::out);
             }
         }
+
         ~UnrolledLinkedList(){
             if(OrinFile.is_open()){OrinFile.close();}
         }
+
         void addElement(const Element & ele){
             if(!OrinFile.is_open()){OrinFile.open(OrinFileName,std::fstream::binary | std::fstream::in | std::fstream::out);}
             OrinFile.seekp(0,std::ios::end);int count1,count2;
@@ -223,6 +225,7 @@ namespace ULL {
             }
             OrinFile.close();
         }
+
         void FindOffset(std::string targetKey,std::vector<int> & vec_ans){
             if(!OrinFile.is_open()){OrinFile.open(OrinFileName,std::fstream::binary | std::fstream::in | std::fstream::out);}
             OrinFile.seekp(0,std::ios::end);int count1,count2;
