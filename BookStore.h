@@ -21,6 +21,7 @@ extern ULL::UnrolledLinkedList<20> ISBN_ULL; // BookData.txt
 extern ULL::UnrolledLinkedList<60> name_ULL;
 extern ULL::UnrolledLinkedList<60> author_ULL;
 extern ULL::UnrolledLinkedList<60> keyword_ULL;
+extern ULL::UnrolledLinkedList<30> log_ULL;
 
 struct User{
         int privilege = 0;
@@ -68,5 +69,5 @@ void modifyBook(string mode,string token);
 void showBook(int mode,string token = "");
 void manageMoney(double number,bool mode);
 void showFinance(int times);
-
+void report(int mode);
 #endif //SRC_USER_H

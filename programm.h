@@ -16,6 +16,7 @@ ULL::UnrolledLinkedList<60> name_ULL("name_ULL.dat");
 ULL::UnrolledLinkedList<60> author_ULL("author_ULL.dat");
 ULL::UnrolledLinkedList<60> keyword_ULL("keyword_ULL.dat");
 ULL::UnrolledLinkedList<30> userID_ULL("userID_ULL.dat");
+ULL::UnrolledLinkedList<30> log_ULL("log_ULL.dat");
 stack<pair<string,int>> OnlineUser;
 
 string deleteQuo(string origin){
@@ -171,7 +172,18 @@ void parseStatement(string order){
         }
     }
     if(token1 == "quit" || token1 == "exit"){
-        throw 1;
+        throw int(1);
+    }
+    if(token1 == "log"){
+        report(1);
+        return;
+    }
+    if(token1 == "report"){
+        sentence >> token2;
+        if(token2 == "myself"){
+            report(2);
+        }
+        return;
     }
     throw "invalid";
 }
@@ -182,6 +194,7 @@ void initialize(){
         file.open("userData.txt",fstream::out);file.close();
         file.open("BookData.txt",fstream::out);file.close();
         file.open("FinanceData.txt",fstream::out);file.close();
+        file.open("logData.txt",fstream::out);file.close();
 
         file.open("FinanceData.txt",fstream::binary | fstream::in | fstream::out);
         pair<double,double> finance(0,0);int counter = 0;

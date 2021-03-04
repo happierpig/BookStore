@@ -76,9 +76,6 @@ void logout(){
 
 void addUser(string _userID,string _passwd,int _privilege,string _name){ // privilege 7/3/1
     vector<int> vec_ans;userID_ULL.FindOffset(_userID,vec_ans);
-//    if (_userID=="vE0iDoWcMu"){
-//        cout << "check" << endl ;
-//    }
     if(!vec_ans.empty()) throw "repeated register";
     if(OnlineUser.empty()) throw "unlogged";
     User online = getUser(OnlineUser.top().first);
@@ -87,12 +84,9 @@ void addUser(string _userID,string _passwd,int _privilege,string _name){ // priv
     fstream file;file.open("userData.txt",fstream::binary | fstream::in | fstream::out | fstream::ate);
     file.seekp(0,std::ios::end);
     int MemPos = file.tellp();file.write(r_cast(temp),sizeof(User));
-//    if(_userID == "vE0iDoWcMu"){
-//        file.seekp(MemPos);file.read(r_cast(temp),sizeof(User));
-//        std::cout << temp.passwd << ' ' << temp.name;
-//    }
     file.close();
     userID_ULL.addElement(ULL::UnrolledLinkedList<30>::Element(_userID,MemPos));
+    throw int(2);
 }
 
 void deleteUser(string _userID){
@@ -108,6 +102,7 @@ void deleteUser(string _userID){
         check_OnlineUser.pop();
     }
     userID_ULL.DeleteElement(ULL::UnrolledLinkedList<30>::Element(_userID,vec_ans[0]));
+    throw int(2);
 }
 
 void changePasswd(string _userID,string _oldpasswd,string _newpasswd){
@@ -129,6 +124,8 @@ void changePasswd(string _userID,string _oldpasswd,string _newpasswd){
     file.seekp(vec_ans[0]);
     file.write(r_cast(temp),sizeof(User));
     file.close();
+    throw int(2);
+
 }
 
 bool isEmpty(string _isbn){
@@ -159,6 +156,7 @@ void select(string _isbn){
     }else{
         OnlineUser.top().second = getBook(_isbn).second;
     }
+    throw int(2);
 }
 
 void importBook(int _quantity,double _cost){
@@ -172,6 +170,8 @@ void importBook(int _quantity,double _cost){
     temp.quantity += _quantity;
     file.seekp(position);file.write(r_cast(temp),sizeof(Book));file.close();
     manageMoney(_cost,false);
+    throw int(2);
+
 }
 
 void buyBook(string _isbn,int _quantity){
@@ -187,6 +187,7 @@ void buyBook(string _isbn,int _quantity){
     printf("%0.2f",_quantity * temp.price);
     manageMoney(_quantity * temp.price,true);
     cout << endl;
+    throw int(2);
 }
 
 void modifyBook(string mode,string token){
@@ -302,6 +303,7 @@ void showBook(int mode,string token){
             break;
     }
     file.close();
+    throw int(2);
 }
 
 void showFinance(int times){
@@ -332,4 +334,36 @@ void showFinance(int times){
         cout << endl;
     }
     file.close();
+    throw int(2);
+}
+
+void report(int mode){
+    if(mode == 1){
+        fstream file;file.open("logData.txt",ios::out | ios::in | ios::binary);
+        vector<int> vec_ans;log_ULL.PrintULL(vec_ans);
+        char tempToken[60];
+        cout << "--------------Output all operations log." << endl;
+        for(int i = 0;i < vec_ans.size();++i){
+            file.seekp(vec_ans[i]);
+            file.read(r_cast(tempToken),sizeof(tempToken));
+            cout << tempToken << endl;
+        }
+        cout << "--------------Output all operations log finished." << endl;
+        file.close();
+        return;
+    }
+    if(mode == 2){//report myself
+        fstream file;file.open("logData.txt",ios::out | ios::in | ios::binary);
+        vector<int> vec_ans;log_ULL.FindOffset(OnlineUser.top().first,vec_ans);
+        char tempToken[60];
+        cout << "--------------Output my operations log." << endl;
+        for(int i = 0;i < vec_ans.size();++i){
+            file.seekp(vec_ans[i]);
+            file.read(r_cast(tempToken),sizeof(tempToken));
+            cout << tempToken << endl;
+        }
+        cout << "--------------Output my operations log finished." << endl;
+        file.close();
+        return;
+    }
 }
