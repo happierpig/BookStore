@@ -15,15 +15,6 @@ int main() {
             parseStatement(token);
         }catch (int &x){
             if(x == 1){return 0;}
-            else{
-                fstream file;file.open("logData.txt",ios::out | ios::in | ios::binary);
-                file.seekg(0,ios::end);int MemPos = file.tellg();
-                log_ULL.insert(Key(OnlineUser.top().first),MemPos);
-                token += "\t" + OnlineUser.top().first;
-                char tempToken[60];strcpy(tempToken,token.c_str());
-                file.write(r_cast(tempToken),sizeof(tempToken));
-                file.close();
-            }
         }
         catch (...) {
             cout << "Invalid" << endl;
