@@ -33,9 +33,9 @@ extern BPlusTree<Key,int> log_ULL;
 
 struct User{
         int privilege = 0;
-        char userID[40] = {0};
-        char passwd[40] = {0};
-        char name[40] = {0};
+        char userID[45] = {0};
+        char passwd[45] = {0};
+        char name[45] = {0};
         User() = default;
         User(const int _privilege,string _userID,string _passwd,string _name);
     };
@@ -48,10 +48,10 @@ void deleteUser(string _userID);
 void changePasswd(string _userID,string _oldpasswd,string _newpasswd);
 
 struct Book{
-        char ISBN[30] = {0};
-        char name[70] = {0};
-        char author[70] = {0};
-        char keyword[70] = {0};
+        char ISBN[35] = {0};
+        char name[75] = {0};
+        char author[75] = {0};
+        char keyword[75] = {0};
         int quantity = 0;
         double price = 0.00;
         Book() = default;

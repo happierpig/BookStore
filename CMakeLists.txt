@@ -6,7 +6,6 @@ SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 
 include_directories(
         ${PROJECT_SOURCE_DIR}/src/
-
 )
 AUX_SOURCE_DIRECTORY(src DIR_SRCS)
 add_executable(code main.cpp UnrolledLinkedList.hpp BookStore.h BookStore.cpp programm.h DiskManager.hpp functions.hpp Myexception.hpp BPlusTree.hpp)

@@ -90,6 +90,7 @@ public:
         }
     }
     void write(const T & data,int position){
+        if(position < 0) std::cerr << "asalsd" << std::endl;
         file.seekp(position,ios::beg);
         file.write(reinterpret_cast<const char *>(&data),sizeof(data));
     }
