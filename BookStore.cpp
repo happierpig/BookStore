@@ -24,16 +24,18 @@ void manageMoney(double number,bool mode){ // true for ben  efit ; false for cos
 }
 
 void registerUser(string _userID,string _passwd,string _name){
-    vector<int> vec_ans;userID_ULL.FindOffset(_userID,vec_ans);
+    vector<int> vec_ans;
+    userID_ULL.find(Key(_userID),vec_ans);
     if(!vec_ans.empty()) throw "repeated register";
     User temp(1,_userID,_passwd,_name);
     fstream file;file.open("userData.txt",fstream::binary | fstream::in | fstream::out | fstream::ate);
     int MemPos = file.tellp();file.write(r_cast(temp),sizeof(User));file.close();
-    userID_ULL.addElement(ULL::UnrolledLinkedList<30>::Element(_userID,MemPos));
+    userID_ULL.insert(Key(_userID),MemPos);
 }
 
 User getUser(string _userID){
-    vector<int> vec_ans;userID_ULL.FindOffset(_userID,vec_ans);
+    vector<int> vec_ans;
+    userID_ULL.find(Key(_userID),vec_ans);
     int position = vec_ans[0];
     fstream file;file.open("userData.txt",fstream::binary | fstream::in | fstream::out);
     file.seekp(position);
@@ -46,7 +48,8 @@ void su(string _userID,string _passwd){
 //    if (_userID=="vE0iDoWcMu"){
 //        cout << "check" << endl ;
 //    }
-    vector<int> vec_ans;userID_ULL.FindOffset(_userID,vec_ans);
+    vector<int> vec_ans;
+    userID_ULL.find(Key(_userID),vec_ans);
     if(vec_ans.empty()) throw "blank account";
     User logging = getUser(_userID);
     if(!OnlineUser.empty()) {
@@ -75,7 +78,8 @@ void logout(){
 }
 
 void addUser(string _userID,string _passwd,int _privilege,string _name){ // privilege 7/3/1
-    vector<int> vec_ans;userID_ULL.FindOffset(_userID,vec_ans);
+    vector<int> vec_ans;
+    userID_ULL.find(Key(_userID),vec_ans);
     if(!vec_ans.empty()) throw "repeated register";
     if(OnlineUser.empty()) throw "unlogged";
     User online = getUser(OnlineUser.top().first);
@@ -85,12 +89,13 @@ void addUser(string _userID,string _passwd,int _privilege,string _name){ // priv
     file.seekp(0,std::ios::end);
     int MemPos = file.tellp();file.write(r_cast(temp),sizeof(User));
     file.close();
-    userID_ULL.addElement(ULL::UnrolledLinkedList<30>::Element(_userID,MemPos));
+    userID_ULL.insert(Key(_userID),MemPos);
     throw int(2);
 }
 
 void deleteUser(string _userID){
-    vector<int> vec_ans;userID_ULL.FindOffset(_userID,vec_ans);
+    vector<int> vec_ans;
+    userID_ULL.find(Key(_userID),vec_ans);
     if(OnlineUser.empty()) throw "unlogged";
     if(vec_ans.empty()) throw "delete blank account";
     User online = getUser(OnlineUser.top().first);
@@ -101,14 +106,15 @@ void deleteUser(string _userID){
         if(check_OnlineUser.top().first == _userID) throw "invalid";
         check_OnlineUser.pop();
     }
-    userID_ULL.DeleteElement(ULL::UnrolledLinkedList<30>::Element(_userID,vec_ans[0]));
+    userID_ULL.erase(Key(_userID),vec_ans[0]);
     throw int(2);
 }
 
 void changePasswd(string _userID,string _oldpasswd,string _newpasswd){
     if(OnlineUser.empty()) throw "unlogged";
     User online = getUser(OnlineUser.top().first);
-    vector<int> vec_ans;userID_ULL.FindOffset(_userID,vec_ans);
+    vector<int> vec_ans;
+    userID_ULL.find(Key(_userID),vec_ans);
     if(vec_ans.empty()) throw "404 not found";
     User temp = getUser(_userID);
     if(online.privilege == 7){
@@ -129,12 +135,14 @@ void changePasswd(string _userID,string _oldpasswd,string _newpasswd){
 }
 
 bool isEmpty(string _isbn){
-    vector<int> vec_ans;ISBN_ULL.FindOffset(_isbn,vec_ans);
+    vector<int> vec_ans;
+    ISBN_ULL.find(Key(_isbn),vec_ans);
     return vec_ans.empty();
 }
 
 pair<Book,int> getBook(string _isbn){
-    vector<int> vec_ans;ISBN_ULL.FindOffset(_isbn,vec_ans);
+    vector<int> vec_ans;
+    ISBN_ULL.find(Key(_isbn),vec_ans);
     int position = vec_ans[0];
     fstream file;file.open("BookData.txt",fstream::binary | fstream::in | fstream::out);
     file.seekp(position);
@@ -152,7 +160,7 @@ void select(string _isbn){
         file.seekp(0,ios::end);
         int position = file.tellp();file.write(r_cast(temp),sizeof(Book));file.close();
         OnlineUser.top().second = position;
-        ISBN_ULL.addElement(ULL::UnrolledLinkedList<20>::Element(_isbn,position));
+        ISBN_ULL.insert(Key(_isbn),position);
     }else{
         OnlineUser.top().second = getBook(_isbn).second;
     }
@@ -200,19 +208,19 @@ void modifyBook(string mode,string token){
     Book temp;file.read(r_cast(temp),sizeof(Book));
     if(strcmp(mode.c_str(),"-ISBN") == 0){
         if(!isEmpty(token)) throw "invalid";
-        ISBN_ULL.DeleteElement(ULL::UnrolledLinkedList<20>::Element(temp.ISBN,position));
+        ISBN_ULL.erase(Key(temp.ISBN),position);
         strcpy(temp.ISBN,token.c_str());
-        ISBN_ULL.addElement(ULL::UnrolledLinkedList<20>::Element(token,position));
+        ISBN_ULL.insert(Key(token),position);
     }
     if(strcmp(mode.c_str(),"-name") == 0){
-        if(temp.name[0] != 0) name_ULL.DeleteElement(ULL::UnrolledLinkedList<60>::Element(temp.name,position));
+        if(temp.name[0] != 0) name_ULL.erase(Key(temp.name),position);
         strcpy(temp.name,token.c_str());
-        name_ULL.addElement(ULL::UnrolledLinkedList<60>::Element(token,position));
+        name_ULL.insert(Key(token),position);
     }
     if(strcmp(mode.c_str(),"-author") == 0){
-        if(temp.author[0] != 0) author_ULL.DeleteElement(ULL::UnrolledLinkedList<60>::Element(temp.author,position));
+        if(temp.author[0] != 0) author_ULL.erase(Key(temp.author),position);
         strcpy(temp.author,token.c_str());
-        author_ULL.addElement(ULL::UnrolledLinkedList<60>::Element(token,position));
+        author_ULL.insert(Key(token),position);
     }
     if(strcmp(mode.c_str(),"-price") == 0){
         stringstream ss(token);
@@ -227,7 +235,7 @@ void modifyBook(string mode,string token){
         }
         while(count2--){
             ss1.getline(indkeyword1,60,'|');
-            keyword_ULL.DeleteElement(ULL::UnrolledLinkedList<60>::Element(indkeyword1,position));
+            keyword_ULL.erase(Key(indkeyword1),position);
         }
         strcpy(temp.keyword,token.c_str());
         stringstream ss(token);
@@ -237,7 +245,7 @@ void modifyBook(string mode,string token){
         }
         while(count--){
             ss.getline(indkeyword,60,'|');
-            keyword_ULL.addElement(ULL::UnrolledLinkedList<60>::Element(indkeyword,position));
+            keyword_ULL.insert(Key(indkeyword),position);
         }
     }
     file.seekp(position);file.write(r_cast(temp),sizeof(Book));file.close();
@@ -252,7 +260,7 @@ void showBook(int mode,string token){
     fstream file;file.open("BookData.txt",fstream::binary | fstream::in | fstream::out);
     switch (mode) {
         case 1:
-            ISBN_ULL.PrintULL(vec_ans);
+            ISBN_ULL.findAll(vec_ans);
             if(vec_ans.empty()){cout << endl; return;}
             for(auto it = vec_ans.begin();it != vec_ans.end();it++) {
                 file.seekp(*it);file.read(r_cast(temp), sizeof(Book));
@@ -260,13 +268,13 @@ void showBook(int mode,string token){
             }
             break;
         case 2:
-            ISBN_ULL.FindOffset(token,vec_ans);
+            ISBN_ULL.find(Key(token),vec_ans);
             if(vec_ans.empty()){cout << endl; return;}
             file.seekp(vec_ans[0]);file.read(r_cast(temp),sizeof(Book));
             cout << temp << endl;
             break;
         case 3:
-            name_ULL.FindOffset(token,vec_ans);
+            name_ULL.find(Key(token),vec_ans);
             if(vec_ans.empty()){cout << endl; return;}
             for(auto it = vec_ans.begin();it != vec_ans.end();it++) {
                 file.seekp(*it);
@@ -278,7 +286,7 @@ void showBook(int mode,string token){
             }
             break;
         case 4:
-            author_ULL.FindOffset(token,vec_ans);
+            author_ULL.find(Key(token),vec_ans);
             if(vec_ans.empty()){cout << endl; return;}
             for(auto it = vec_ans.begin();it != vec_ans.end();it++) {
                 file.seekp(*it);
@@ -290,7 +298,7 @@ void showBook(int mode,string token){
             }
             break;
         case 5:
-            keyword_ULL.FindOffset(token,vec_ans);
+            keyword_ULL.find(Key(token),vec_ans);
             if(vec_ans.empty()){cout << endl; return;}
             for(auto it = vec_ans.begin();it != vec_ans.end();it++) {
                 file.seekp(*it);
@@ -340,7 +348,8 @@ void showFinance(int times){
 void report(int mode){
     if(mode == 1){
         fstream file;file.open("logData.txt",ios::out | ios::in | ios::binary);
-        vector<int> vec_ans;log_ULL.PrintULL(vec_ans);
+        vector<int> vec_ans;
+        log_ULL.findAll(vec_ans);
         char tempToken[60];
         cout << "--------------Output all operations log." << endl;
         for(int i = 0;i < vec_ans.size();++i){
@@ -354,7 +363,8 @@ void report(int mode){
     }
     if(mode == 2){//report myself
         fstream file;file.open("logData.txt",ios::out | ios::in | ios::binary);
-        vector<int> vec_ans;log_ULL.FindOffset(OnlineUser.top().first,vec_ans);
+        vector<int> vec_ans;
+        log_ULL.find(Key(OnlineUser.top().first),vec_ans);
         char tempToken[60];
         cout << "--------------Output my operations log." << endl;
         for(int i = 0;i < vec_ans.size();++i){

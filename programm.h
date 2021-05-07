@@ -9,14 +9,22 @@
 #include <sstream>
 #include <cstring>
 #include "BookStore.h"
+#include "BPlusTree.hpp"
 using namespace std;
 
-ULL::UnrolledLinkedList<20> ISBN_ULL("ISBN_ULL.dat");
-ULL::UnrolledLinkedList<60> name_ULL("name_ULL.dat");
-ULL::UnrolledLinkedList<60> author_ULL("author_ULL.dat");
-ULL::UnrolledLinkedList<60> keyword_ULL("keyword_ULL.dat");
-ULL::UnrolledLinkedList<30> userID_ULL("userID_ULL.dat");
-ULL::UnrolledLinkedList<30> log_ULL("log_ULL.dat");
+//ULL::UnrolledLinkedList<20> ISBN_ULL("ISBN_ULL.dat");
+//ULL::UnrolledLinkedList<60> name_ULL("name_ULL.dat");
+//ULL::UnrolledLinkedList<60> author_ULL("author_ULL.dat");
+//ULL::UnrolledLinkedList<60> keyword_ULL("keyword_ULL.dat");
+//ULL::UnrolledLinkedList<30> userID_ULL("userID_ULL.dat");
+//ULL::UnrolledLinkedList<30> log_ULL("log_ULL.dat");
+BPlusTree<Key,int> ISBN_ULL("ISBN");
+BPlusTree<Key,int> name_ULL("name_ULL");
+BPlusTree<Key,int> author_ULL("author_ULL");
+BPlusTree<Key,int> keyword_ULL("keyword_ULL");
+BPlusTree<Key,int> userID_ULL("userID_ULL");
+BPlusTree<Key,int> log_ULL("log_ULL");
+
 stack<pair<string,int>> OnlineUser;
 
 string deleteQuo(string origin){
@@ -204,7 +212,7 @@ void initialize(){
         User temp(7,"root","sjtu","root");
         file.open("userData.txt",fstream::binary | fstream::in | fstream::out);
         file.write(r_cast(temp),sizeof(User));file.close();
-        userID_ULL.addElement(ULL::UnrolledLinkedList<30>::Element("root",0));
+        userID_ULL.insert(Key("root"),0);
     }
     if(file.is_open()) file.close();
 }

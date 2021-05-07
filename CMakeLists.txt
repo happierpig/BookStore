@@ -9,4 +9,4 @@ include_directories(
 
 )
 AUX_SOURCE_DIRECTORY(src DIR_SRCS)
-add_executable(code main.cpp UnrolledLinkedList.hpp BookStore.h BookStore.cpp programm.h)
+add_executable(code main.cpp UnrolledLinkedList.hpp BookStore.h BookStore.cpp programm.h DiskManager.hpp functions.hpp Myexception.hpp BPlusTree.hpp)

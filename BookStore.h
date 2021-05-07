@@ -8,6 +8,7 @@
 #include <iostream>
 #include <fstream>
 #include "UnrolledLinkedList.hpp"
+#include "BPlusTree.hpp"
 #include <cstring>
 #include <vector>
 #include <stack>
@@ -15,13 +16,20 @@
 #include <map>
 
 using namespace std;
-extern ULL::UnrolledLinkedList<30> userID_ULL; // userData.txt
 extern stack<pair<string,int>> OnlineUser;
-extern ULL::UnrolledLinkedList<20> ISBN_ULL; // BookData.txt
-extern ULL::UnrolledLinkedList<60> name_ULL;
-extern ULL::UnrolledLinkedList<60> author_ULL;
-extern ULL::UnrolledLinkedList<60> keyword_ULL;
-extern ULL::UnrolledLinkedList<30> log_ULL;
+//extern ULL::UnrolledLinkedList<30> userID_ULL; // userData.txt
+//extern ULL::UnrolledLinkedList<20> ISBN_ULL; // BookData.txt
+//extern ULL::UnrolledLinkedList<60> name_ULL;
+//extern ULL::UnrolledLinkedList<60> author_ULL;
+//extern ULL::UnrolledLinkedList<60> keyword_ULL;
+//extern ULL::UnrolledLinkedList<30> log_ULL;
+
+extern BPlusTree<Key,int> ISBN_ULL;
+extern BPlusTree<Key,int> name_ULL;
+extern BPlusTree<Key,int> author_ULL;
+extern BPlusTree<Key,int> keyword_ULL;
+extern BPlusTree<Key,int> userID_ULL;
+extern BPlusTree<Key,int> log_ULL;
 
 struct User{
         int privilege = 0;
