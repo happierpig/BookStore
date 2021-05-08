@@ -62,7 +62,7 @@ struct Key{
     }
 };
 
-template <class Key,class Data,int M = 100,int L = 50>
+template <class Key,class Data,int M = 100,int L = 100>
 class BPlusTree{
 private:
     class basicInfo{
@@ -72,7 +72,7 @@ private:
         int size = 0; // size of the element
     };
     class recursiveKey{
-        int data[100]; // 1-base
+        int data[200]; // 1-base
         int ptr; // ptr points to the latest data
     public:
         recursiveKey():ptr(0){
@@ -86,9 +86,6 @@ private:
         }
         void clear(){
             ptr = 0;
-        }
-        int size() {
-            return ptr;
         }
     };
     // below is the parameters of the tree
