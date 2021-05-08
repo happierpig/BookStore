@@ -62,7 +62,7 @@ struct Key{
     }
 };
 
-template <class Key,class Data,int M = 200,int L = 150>
+template <class Key,class Data,int M = 200,int L = 15>
 class BPlusTree{
 private:
     class basicInfo{
@@ -86,6 +86,9 @@ private:
         }
         void clear(){
             ptr = 0;
+        }
+        int & top(){
+            return data[ptr];
         }
     };
     // below is the parameters of the tree
@@ -126,7 +129,7 @@ private:
             newNode.father = this->father;
             newNode.leftBrother = this->position;
             newNode.rightBrother = this->rightBrother;
-            if(this->rightBrother >= 0){
+            if(this->rightBrother > 0){
                 leafNode tmpNode = theTree->leafDisk.read(this->rightBrother);
                 tmpNode.leftBrother = newNode.position;
                 theTree->leafDisk.write(tmpNode,this->rightBrother);
@@ -159,23 +162,24 @@ private:
                 tmpNode.findElement(_key,vec_ans,theTree,false,true);
             }
         }
-        void eraseAssistant(const Key & _key,const Data & _data,BPlusTree * theTree,bool left,bool right,int & leafPos,int & keyPos){
+        void eraseAssistant(const Key & _key,const Data & _data,BPlusTree * theTree,bool left,bool right,int & leafPos,int & keyPos,int modify){
             int pos1 = lower_bound(this->dataKey,this->dataSize,_key);
             int pos2 = upper_bound(this->dataKey,this->dataSize,_key);
             for(int i = pos1;i <= pos2 && i < this->dataSize;++i){
                 if(this->dataKey[i] == _key && this->dataSet[i] == _data){
                     leafPos = this->position;
                     keyPos = i;
+                    theTree->rekeyPos.top() += modify;
                     return;
                 }
             }
             if(this->dataKey[0] == _key && this->leftBrother != -1 && left && leafPos == -1){
                 leafNode tmpNode = theTree->leafDisk.read(this->leftBrother);
-                tmpNode.eraseAssistant(_key,_data,theTree,true,false,leafPos,keyPos);
+                tmpNode.eraseAssistant(_key,_data,theTree,true,false,leafPos,keyPos,modify-1);
             }
             if(this->dataKey[dataSize-1] == _key && this->rightBrother != -1 && right && leafPos == -1){
                 leafNode tmpNode = theTree->leafDisk.read(this->rightBrother);
-                tmpNode.eraseAssistant(_key,_data,theTree,false,true,leafPos,keyPos);
+                tmpNode.eraseAssistant(_key,_data,theTree,false,true,leafPos,keyPos,modify+1);
             }
         }
         bool askLeft(BPlusTree * theTree){
@@ -202,7 +206,6 @@ private:
                 theTree->nodeDisk.write(fatherNode,fatherNode.position);
             }else{ // merge left brother and this into one leafNode
                 // merge two into one
-                Key tmpKey = leftBro.dataKey[0];
                 for(int i = 0;i < this->dataSize;++i){
                     leftBro.dataKey[leftBro.dataSize+i] = this->dataKey[i];
                     leftBro.dataSet[leftBro.dataSize+i] = this->dataSet[i];
@@ -210,7 +213,7 @@ private:
                 leftBro.dataSize += this->dataSize;
                 // write back && modify the linkList
                 leftBro.rightBrother = this->rightBrother;
-                if(~this->rightBrother){
+                if(this->rightBrother != -1){
                     leafNode tmprr = theTree->leafDisk.read(this->rightBrother);
                     tmprr.leftBrother = leftBro.position;
                     theTree->leafDisk.write(tmprr,tmprr.position);
@@ -257,7 +260,7 @@ private:
                 this->dataSize += rightBro.dataSize;
                 // write back && modify the linkList
                 this->rightBrother = rightBro.rightBrother;
-                if(~rightBro.rightBrother){
+                if(rightBro.rightBrother != -1){
                     leafNode tmprr = theTree->leafDisk.read(rightBro.rightBrother);
                     tmprr.leftBrother = this->position;
                     theTree->leafDisk.write(tmprr,tmprr.position);
@@ -350,7 +353,7 @@ private:
             tmpNode.leftBrother = this->position;tmpNode.rightBrother = this->rightBrother;
             tmpNode.childSize = MAX_CHILD - MIN_CHILD; // keysize = MAX_CHILD - MIN_CHILD - 1
             tmpNode.childIsLeaf = this->childIsLeaf;
-            if(this->rightBrother >= 0){
+            if(this->rightBrother > 0){
                 Node tmpNode1 = (theTree->nodeDisk.read(this->rightBrother));
                 tmpNode1.leftBrother = tmpNode.position;
                 theTree->nodeDisk.write(tmpNode1,tmpNode1.position);
@@ -443,7 +446,7 @@ private:
                 leftBro.childSize += this->childSize;
                 // write back && modify the linkList
                 leftBro.rightBrother = this->rightBrother;
-                if(~this->rightBrother){
+                if(this->rightBrother != -1){
                     Node tmprr = theTree->nodeDisk.read(this->rightBrother);
                     tmprr.leftBrother = leftBro.position;
                     theTree->nodeDisk.write(tmprr,tmprr.position);
@@ -517,7 +520,7 @@ private:
                 this->childSize += rightBro.childSize;
                 // write back && modify the linkList
                 this->rightBrother = rightBro.rightBrother;
-                if(~rightBro.rightBrother){
+                if(rightBro.rightBrother != -1){
                     Node tmprr = theTree->nodeDisk.read(rightBro.rightBrother);
                     tmprr.leftBrother = this->position;
                     theTree->nodeDisk.write(tmprr,tmprr.position);
@@ -621,6 +624,7 @@ private:
         }
         int index = upper_bound(tmpNode.nodeKey,tmpNode.childSize-1,_key);
         rekeyPos.push_back(index);
+//        if(fileName == "author_ULL")this->show();
         return tmpNode.childPosition[index];
     }
 public:
@@ -662,7 +666,7 @@ public:
         int leafPos = -1,keyPos = -1;
         int leafPosition = findLeaf(_key);
         leafNode tmpLeafNode = leafDisk.read(leafPosition);
-        tmpLeafNode.eraseAssistant(_key,_data,this,true,true,leafPos,keyPos);
+        tmpLeafNode.eraseAssistant(_key,_data,this,true,true,leafPos,keyPos,0);
         if(leafPos == -1) return false;
         if(treeInfo.size == 1){
             this->clear();
@@ -685,12 +689,12 @@ public:
     void find(const Key & _key,vector<Data> & vec_ans){
         if(treeInfo.root == -1) return;
         int leafPosition = findLeaf(_key);
-#ifdef debug
-        if(leafPosition == 5756 && _key == Key("avocet")){
-            this->show();
-            std::cout << 1;
-        }
-#endif debug
+//#ifdef debug
+//        if(leafPosition == 5756 && _key == Key("avocet")){
+//            this->show();
+//            std::cout << 1;
+//        }
+//#endif debug
         leafNode tmpLeafNode = leafDisk.read(leafPosition);
         tmpLeafNode.findElement(_key,vec_ans,this,true,true);
     }

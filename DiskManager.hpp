@@ -90,7 +90,9 @@ public:
         }
     }
     void write(const T & data,int position){
-        if(position < 0) std::cerr << "asalsd" << std::endl;
+        if(position < 0){
+            std::cerr << "writing point < 0" << std::endl;
+        }
         file.seekp(position,ios::beg);
         file.write(reinterpret_cast<const char *>(&data),sizeof(data));
     }
@@ -112,6 +114,10 @@ public:
         return temp;
     }
     int tellp(){
+        if(file.fail()){
+            file.clear();file.close();
+            file.open(fileName,ios::in | ios::out | ios::binary);
+        }
         if(nowPtr >= 0) return nowPtr;
         else{
             file.seekp(0,ios::end);
