@@ -8,6 +8,7 @@
 #include "Myexception.hpp"
 #include "functions.hpp"
 #include <cstring>
+#include <iostream>
 #include <vector>
 
 //#define debug // using Xiatian's debug method
@@ -54,6 +55,10 @@ struct Key{
     bool operator >= (const Key & o) const{
         if(*this > o || *this == o) return true;
         else return false;
+    }
+    friend std::ostream & operator << (std::ostream & os,const Key & _key){
+        std::cout << _key.key;
+        return os;
     }
 };
 
@@ -170,7 +175,7 @@ private:
                 ++this->dataSize;--leftBro.dataSize;
                 //deal with father
                 Node fatherNode = theTree->nodeDisk.read(this->father);
-                int pos = upper_bound(fatherNode.nodeKey,fatherNode.childSize-1,this->dataKey[0]);
+                int pos = upper_bound(fatherNode.nodeKey,fatherNode.childSize-1,leftBro.dataKey[0]);
                 fatherNode.nodeKey[pos] = this->dataKey[0];
                 //write back
                 theTree->leafDisk.write(*this,this->position);
@@ -178,7 +183,7 @@ private:
                 theTree->nodeDisk.write(fatherNode,fatherNode.position);
             }else{ // merge left brother and this into one leafNode
                 // merge two into one
-                Key tmpKey = leftBro.dataKey[leftBro.dataSize-1];
+                Key tmpKey = leftBro.dataKey[0];
                 for(int i = 0;i < this->dataSize;++i){
                     leftBro.dataKey[leftBro.dataSize+i] = this->dataKey[i];
                     leftBro.dataSet[leftBro.dataSize+i] = this->dataSet[i];
@@ -215,7 +220,7 @@ private:
                 ++this->dataSize;--rightBro.dataSize;
                 //deal with father
                 Node fatherNode = theTree->nodeDisk.read(this->father);
-                int pos = upper_bound(fatherNode.nodeKey,fatherNode.childSize-1,this->dataKey[this->dataSize-2]);
+                int pos = upper_bound(fatherNode.nodeKey,fatherNode.childSize-1,this->dataKey[0]);
                 fatherNode.nodeKey[pos] = rightBro.dataKey[0];
                 //write back
                 theTree->leafDisk.write(*this,this->position);
@@ -223,7 +228,7 @@ private:
                 theTree->nodeDisk.write(fatherNode,fatherNode.position);
             }else{ // merge right brother and this into one leafNode
                 // merge two into one
-                Key tmpKey = this->dataKey[this->dataSize-1];
+                Key tmpKey = this->dataKey[0];
                 for(int i = 0;i < rightBro.dataSize;++i){
                     this->dataKey[this->dataSize+i] = rightBro.dataKey[i];
                     this->dataSet[this->dataSize+i] = rightBro.dataSet[i];
@@ -289,6 +294,11 @@ private:
         int childPosition[MAX_CHILD+5]; // position in nodeDisk(when child is leaf,position is in leafDisk)
         bool childIsLeaf = false;
         void addElement(const Key & _key,int _position,BPlusTree * theTree){
+#ifdef debug
+            if(nodeKey[1] == Key("avocet")){
+                std::cout << 1;
+            }
+#endif debug
             int index = upper_bound(this->nodeKey,childSize-1,_key);
             for(int i = childSize-1;i > index;--i){
                 nodeKey[i] = nodeKey[i-1];
@@ -359,7 +369,7 @@ private:
             if(leftBro.childSize > MIN_CHILD){ // borrow one node from left brother,that means child's key move upward and father key move down
                 // update father node
                 Node fatherNode = theTree->nodeDisk.read(this->father);
-                int keyPos = upper_bound(fatherNode.nodeKey,fatherNode.childSize-1,leftBro.nodeKey[leftBro.childSize-2]);
+                int keyPos = upper_bound(fatherNode.nodeKey,fatherNode.childSize-1,leftBro.nodeKey[0]);
                 Key targetKey = fatherNode.nodeKey[keyPos];
                 fatherNode.nodeKey[keyPos] = leftBro.nodeKey[leftBro.childSize-2];
                 theTree->nodeDisk.write(fatherNode,fatherNode.position);
@@ -390,7 +400,7 @@ private:
             }else{ // merge two nodes
                 // update father node in the end
                 Node fatherNode = theTree->nodeDisk.read(this->father);
-                int keyPos = upper_bound(fatherNode.nodeKey,fatherNode.childSize-1,leftBro.nodeKey[leftBro.childSize-2]);
+                int keyPos = upper_bound(fatherNode.nodeKey,fatherNode.childSize-1,leftBro.nodeKey[0]);
                 Key downKey = fatherNode.nodeKey[keyPos];
                 // merge two into one
                 leftBro.nodeKey[leftBro.childSize-1] = downKey;
@@ -431,7 +441,7 @@ private:
             if(rightBro.childSize > MIN_CHILD){ // borrow one node from left brother,that means child's key move upward and father key move down
                 // update father node
                 Node fatherNode = theTree->nodeDisk.read(this->father);
-                int keyPos = upper_bound(fatherNode.nodeKey,fatherNode.childSize-1,this->nodeKey[this->childSize-2]);
+                int keyPos = upper_bound(fatherNode.nodeKey,fatherNode.childSize-1,this->nodeKey[0]);
                 Key targetKey = fatherNode.nodeKey[keyPos];
                 fatherNode.nodeKey[keyPos] = rightBro.nodeKey[1];
                 theTree->nodeDisk.write(fatherNode,fatherNode.position);
@@ -462,7 +472,7 @@ private:
             }else{ // merge two nodes
                 // update father node in the end
                 Node fatherNode = theTree->nodeDisk.read(this->father);
-                int keyPos = upper_bound(fatherNode.nodeKey,fatherNode.childSize-1,this->nodeKey[this->childSize-2]);
+                int keyPos = upper_bound(fatherNode.nodeKey,fatherNode.childSize-1,this->nodeKey[0]);
                 Key downKey = fatherNode.nodeKey[keyPos];
                 // merge two into one
                 this->nodeKey[this->childSize-1] = downKey;
@@ -497,6 +507,11 @@ private:
             return true;
         }
         void deleteElement(int keyPos,BPlusTree * theTree){
+#ifdef debug
+            if(nodeKey[1] == Key("avocet")){
+                std::cout << 1;
+            }
+#endif debug
             for(int i = keyPos;i < childSize - 2;++i){
                 this->nodeKey[i] = this->nodeKey[i+1];
             }
@@ -548,6 +563,7 @@ private:
     };
 private:
     //below are private members of the tree
+    string fileName;
     basicInfo treeInfo;
     DiskManager<leafNode,basicInfo> leafDisk;
     DiskManager<Node,basicInfo> nodeDisk;
@@ -582,13 +598,18 @@ private:
             int index = upper_bound(tmpNode.nodeKey,tmpNode.childSize-1,_key);
             tmpNode = nodeDisk.read(tmpNode.childPosition[index]);
         }
+#ifdef debug
+        if(tmpNode.nodeKey[1] == Key("avocet")){
+            cout << 1;
+        }
+#endif
         int index = upper_bound(tmpNode.nodeKey,tmpNode.childSize-1,_key);
         return tmpNode.childPosition[index];
     }
 public:
     // interfaces for my B+Tree
     BPlusTree() = delete;
-    explicit BPlusTree(const string & _name):leafDisk(_name + "_leaf.dat"),nodeDisk(_name + "_node.dat"){
+    explicit BPlusTree(const string & _name):leafDisk(_name + "_leaf.dat"),nodeDisk(_name + "_node.dat"),fileName(_name){
         treeInfo = nodeDisk.tellInfo();
     }
     ~BPlusTree(){
@@ -609,6 +630,14 @@ public:
             leafNode tmpLeaf = leafDisk.read(leafPos);
             tmpLeaf.addElement(_key,_data,this);
         }
+#ifdef debug
+        if(fileName == "keyword_ULL") {
+            std::cout << std::endl << "-------- began --------" << std::endl;
+            std::cout << "插入了 key: " << _key  << std::endl;
+            this->show();
+            std::cout << std::endl << "-------- Over --------" << std::endl;
+        }
+#endif debug
     }
     // delete the specific data with the key
     bool erase(const Key & _key,const Data & _data){
@@ -625,12 +654,26 @@ public:
         leafNode targetLeafNode = leafDisk.read(leafPos);
         targetLeafNode.deleteElement(keyPos,this);
         --treeInfo.size;
+#ifdef debug
+        if(fileName == "keyword_ULL") {
+            std::cout << std::endl << "-------- began --------" << std::endl;
+            std::cout << "删除了 key: " << _key  << std::endl;
+            this->show();
+            std::cout << std::endl << "-------- Over --------" << std::endl;
+        }
+#endif
         return true;
     }
     // find all data associated with the key
     void find(const Key & _key,vector<Data> & vec_ans){
         if(treeInfo.root == -1) return;
         int leafPosition = findLeaf(_key);
+#ifdef debug
+        if(leafPosition == 5756 && _key == Key("avocet")){
+            this->show();
+            std::cout << 1;
+        }
+#endif debug
         leafNode tmpLeafNode = leafDisk.read(leafPosition);
         tmpLeafNode.findElement(_key,vec_ans,this,true,true);
     }

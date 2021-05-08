@@ -4,13 +4,12 @@
 #include "BookStore.h"
 #include "programm.h"
 #include "UnrolledLinkedList.hpp"
-
 using namespace std;
 int main() {
     initialize();
-//    fstream fin("6.in");
+    fstream fin("1.txt");
     string token;
-    while(getline(cin,token)){
+    while(getline(fin,token)){
         try {
             parseStatement(token);
         }catch (int &x){

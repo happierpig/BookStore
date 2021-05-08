@@ -135,6 +135,11 @@ void parseStatement(string order){
             sentence.get();
             sentence.getline(temp,10,'=');
             sentence >> token1;
+#ifdef debug
+            if(token1 == "\"briar|telephone|keyword\""){
+                cout << 1;
+            }
+#endif
             modifyBook(temp,deleteQuo(token1));
         }
         return;

@@ -229,7 +229,8 @@ void modifyBook(string mode,string token){
     if(strcmp(mode.c_str(),"-keyword") == 0){
         if(strcmp(token.c_str(),"keyword1|1|1") == 0) throw "invalid";
         stringstream ss1(temp.keyword);
-        int count2 = temp.keyword[0] == '\0' ? 0:1;char indkeyword1[60];
+        int count2 = (temp.keyword[0] == '\0') ? 0:1;
+        char indkeyword1[60];
         for(int i = 0;i < 60 && temp.keyword[i] != '\0';++i) {
             if(temp.keyword[i] == '|') count2 ++;
         }
@@ -247,6 +248,11 @@ void modifyBook(string mode,string token){
             ss.getline(indkeyword,60,'|');
             keyword_ULL.insert(Key(indkeyword),position);
         }
+//#ifdef debug
+//        std::cerr << std::endl << "-------- began --------" << std::endl;
+//        keyword_ULL.show();
+//        std::cerr << std::endl << "-------- Over --------" << std::endl;
+//#endif debug
     }
     file.seekp(position);file.write(r_cast(temp),sizeof(Book));file.close();
 }
@@ -298,6 +304,11 @@ void showBook(int mode,string token){
             }
             break;
         case 5:
+#ifdef debug
+            if(token == "avocet"){
+                std::cout << 1;
+            }
+#endif
             keyword_ULL.find(Key(token),vec_ans);
             if(vec_ans.empty()){cout << endl; return;}
             for(auto it = vec_ans.begin();it != vec_ans.end();it++) {
