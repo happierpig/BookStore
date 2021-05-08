@@ -21,8 +21,8 @@ namespace myFunctions{
         return l;
     }
     /*
-     *     0   1   2   3   4
-     *   0   1   2   3   4   5
+     *     0   1   2   3   4                0
+     *   0   1   2   3   4   5             0   1
      */
     template<class T>
     int lower_bound(const T * const head,int size,const T & _target){
