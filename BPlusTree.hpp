@@ -62,7 +62,7 @@ struct Key{
     }
 };
 
-template <class Key,class Data,int M = 200,int L = 5>
+template <class Key,class Data,int M = 200,int L = 200>
 class BPlusTree{
 private:
     class basicInfo{
