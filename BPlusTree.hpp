@@ -688,7 +688,7 @@ public:
             this->show();
             std::cout << std::endl << "-------- Over --------" << std::endl;
         }
-#endif debug
+#endif
     }
     // delete the specific data with the key
     bool erase(const Key & _key,const Data & _data){
@@ -724,7 +724,7 @@ public:
 //            this->show();
 //            std::cout << 1;
 //        }
-//#endif debug
+//#endif
         leafNode tmpLeafNode = leafDisk.read(leafPosition);
         tmpLeafNode.findElement(_key,vec_ans,this,true,true);
     }
