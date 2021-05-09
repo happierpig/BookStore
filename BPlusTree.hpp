@@ -62,7 +62,7 @@ struct Key{
     }
 };
 
-template <class Key,class Data,int M = 200,int L = 25>
+template <class Key,class Data,int M = 200,int L = 5>
 class BPlusTree{
 private:
     class basicInfo{
@@ -254,7 +254,6 @@ private:
                 theTree->nodeDisk.write(fatherNode,fatherNode.position);
             }else{ // merge right brother and this into one leafNode
                 // merge two into one
-                Key tmpKey = this->dataKey[0];
                 for(int i = 0;i < rightBro.dataSize;++i){
                     this->dataKey[this->dataSize+i] = rightBro.dataKey[i];
                     this->dataSet[this->dataSize+i] = rightBro.dataSet[i];
