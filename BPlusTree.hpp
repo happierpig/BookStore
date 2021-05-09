@@ -11,7 +11,7 @@
 #include <iostream>
 #include <vector>
 
-//#define debug // using Xiatian's debug method
+#define debug // using Xiatian's debug method
 
 using std::string;
 using std::vector;
@@ -284,6 +284,14 @@ private:
             }
             --dataSize;
             if(dataSize > MIN_RECORD-1){
+                if(keyPos == 0){
+                    Node tmpFather = theTree->nodeDisk.read(this->father);
+                    int tmp = tmpFather.findKeyPos(this->position);
+                    if(tmp != 0){
+                        tmpFather.nodeKey[tmp-1] = this->dataKey[0];
+                        theTree->nodeDisk.write(tmpFather,tmpFather.position);
+                    }
+                }
                 theTree->leafDisk.write(*this,this->position);
                 return;
             }
@@ -558,6 +566,7 @@ private:
                 }
             }
             if(childSize > MIN_CHILD-1){
+
                 theTree->nodeDisk.write(*this,this->position);
                 return;
             }
@@ -625,6 +634,11 @@ private:
         leafDisk.write(newLeafNode);
     }
     int findLeaf(const Key & _key){
+#ifdef  debug
+        if(fileName == "author_ULL" && _key == Key("JohnSmith")){
+            std::cout << 1;
+        }
+#endif
 //        if(treeInfo.root == -1) error("树为空");
         rekeyPos.clear();
         Node tmpNode = nodeDisk.read(this->treeInfo.root);
@@ -655,6 +669,11 @@ public:
     }
     //parameter: the key and  the data object itself
     void insert(const Key & _key,const Data & _data){
+#ifdef  debug
+        if(fileName == "author_ULL" && _key == Key("JohnSmith")){
+            std::cout << 1;
+        }
+#endif
         treeInfo.size++;
         if(treeInfo.root == -1) createRoot(_key,_data);
         else{
@@ -663,7 +682,7 @@ public:
             tmpLeaf.addElement(_key,_data,this);
         }
 #ifdef debug
-        if(fileName == "keyword_ULL") {
+        if(fileName == "author_ULL") {
             std::cout << std::endl << "-------- began --------" << std::endl;
             std::cout << "插入了 key: " << _key  << std::endl;
             this->show();
@@ -687,7 +706,7 @@ public:
         targetLeafNode.deleteElement(keyPos,this);
         --treeInfo.size;
 #ifdef debug
-        if(fileName == "keyword_ULL") {
+        if(fileName == "author_ULL") {
             std::cout << std::endl << "-------- began --------" << std::endl;
             std::cout << "删除了 key: " << _key  << std::endl;
             this->show();
