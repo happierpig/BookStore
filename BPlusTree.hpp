@@ -62,7 +62,7 @@ struct Key{
     }
 };
 
-template <class Key,class Data,int M = 200,int L = 250>
+template <class Key,class Data,int M = 200,int L = 350>
 class BPlusTree{
 private:
     class basicInfo{
@@ -104,8 +104,8 @@ private:
         int leftBrother = -1;
         int rightBrother = -1;
         int dataSize = 0;
-        Key dataKey[MAX_RECORD+5];
-        Data dataSet[MAX_RECORD+5]; // data is directly stored in leaf node which accelerate the speed of reading disk
+        Key dataKey[MAX_RECORD];
+        Data dataSet[MAX_RECORD]; // data is directly stored in leaf node which accelerate the speed of reading disk
         void addElement(const Key & _key,const Data & _data,BPlusTree * theTree){
             int index = upper_bound(dataKey,dataSize,_key);
             for(int i = dataSize;i > index;--i){
@@ -325,8 +325,8 @@ private:
         int leftBrother = -1;
         int rightBrother = -1;
         int childSize = 0;
-        Key nodeKey[MAX_CHILD+5];
-        int childPosition[MAX_CHILD+5]; // position in nodeDisk(when child is leaf,position is in leafDisk)
+        Key nodeKey[MAX_CHILD];
+        int childPosition[MAX_CHILD]; // position in nodeDisk(when child is leaf,position is in leafDisk)
         bool childIsLeaf = false;
         void addElement(const Key & _key,int _position,BPlusTree * theTree){
 //            int index = upper_bound(this->nodeKey,childSize-1,_key);
