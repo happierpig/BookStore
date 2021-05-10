@@ -631,7 +631,7 @@ private:
 public:
     // interfaces for my B+Tree
     BPlusTree() = delete;
-    explicit BPlusTree(const string & _name):leafDisk(_name + "_leaf.dat",233),nodeDisk(_name + "_node.dat",133){
+    explicit BPlusTree(const string & _name):leafDisk(_name + "_leaf.dat",233),nodeDisk(_name + "_node.dat",153){
         treeInfo = nodeDisk.tellInfo();
     }
     ~BPlusTree(){
