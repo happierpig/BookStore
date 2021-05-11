@@ -211,8 +211,6 @@ public:
             }
             file.seekp(position, ios::beg);
             file.write(reinterpret_cast<const char *>(data), sizeof(*data));
-            typename List::Node * tmp = cache.insert(index,temp);
-            assistantMap.insert(index,tmp);
         }
     }
     T * read(int index) {
