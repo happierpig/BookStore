@@ -196,6 +196,7 @@ public:
         }
     }
     void write(const T * data,int position){
+        if(position == -1) std::cerr << "negative position" << std::endl;
         if(assistantMap.exist(position)){
             cache.update(assistantMap.find(position));
         }else {
