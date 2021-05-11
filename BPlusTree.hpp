@@ -558,6 +558,9 @@ private:
         }
 
         int findKeyPos(int sonPos){
+            if(sonPos == -1){
+                std::cerr << "son position is negetive" << std::endl;
+            }
             for(int i = 0; i < this->childSize;++i){
                 if(this->childPosition[i] == sonPos) return i;
             }
