@@ -561,7 +561,7 @@ private:
             for(int i = 0; i < this->childSize;++i){
                 if(this->childPosition[i] == sonPos) return i;
             }
-            std::cerr << "can not find the position";
+            std::cerr << "can not find the position" << std::endl;
         }
 #ifdef debug
 
