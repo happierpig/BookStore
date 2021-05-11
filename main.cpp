@@ -7,9 +7,9 @@
 using namespace std;
 int main() {
     initialize();
-//    fstream fin("1.in");
+    fstream fin("10.in");
     string token;
-    while(getline(cin,token)){
+    while(getline(fin,token)){
         try {
             parseStatement(token);
         }catch (int &x){
