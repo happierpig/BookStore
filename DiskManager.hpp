@@ -186,16 +186,16 @@ public:
             file.seekp(0,ios::end);
             temp = file.tellp();
             file.write(reinterpret_cast<const char *>(&data),sizeof(data));
-            typename List::Node * tmp = cache.insert(index,temp);
-            assistantMap.insert(index,tmp);
+            typename List::Node * tmp = cache.insert(temp,data);
+            assistantMap.insert(temp,tmp);
             return temp;
         }else{
             temp = nowPtr;
             file.seekp(temp,ios::beg);
             file.write(reinterpret_cast<const char *>(&data),sizeof(data));
             setSparePointer();
-            typename List::Node * tmp = cache.insert(index,temp);
-            assistantMap.insert(index,tmp);
+            typename List::Node * tmp = cache.insert(temp,data);
+            assistantMap.insert(temp,tmp);
             return temp;
         }
     }
