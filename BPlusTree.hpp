@@ -468,6 +468,11 @@ private:
                 theTree->nodeDisk.write(leftBro,leftBro->position);
                 theTree->nodeDisk.erase(this->position);
                 // delete the element in father node
+#ifdef debug
+                if(fatherNode->position == -1){
+                    cerr << "location in internalNode askLeft ^ 2" << endl;
+                }
+#endif
                 fatherNode->deleteElement(keyPos,theTree);
             }
             return true;
@@ -544,6 +549,11 @@ private:
                 theTree->nodeDisk.write(this,this->position);
                 theTree->nodeDisk.erase(rightBro->position);
                 // delete the element in father node
+#ifdef debug
+                if(fatherNode->position == -1){
+                    cerr << "location in internalNode askRight ^ 2" << endl;
+                }
+#endif
                 fatherNode->deleteElement(keyPos,theTree);
             }
             return true;
