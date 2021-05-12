@@ -529,6 +529,7 @@ private:
             return true;
         }
         void deleteElement(int keyPos,BPlusTree * theTree){
+            if(this->position == -1) return;
 #ifdef debug
             if(this->position == -1) {
                 cerr << "debug location" << endl;
