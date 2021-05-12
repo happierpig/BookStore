@@ -10,7 +10,7 @@
 #include <cstring>
 #include <vector>
 //#include "vector.hpp"
-#define debug // using Xiatian's debug method
+//#define debug // using Xiatian's debug method
 
 using std::string;
 //using sjtu::vector;
