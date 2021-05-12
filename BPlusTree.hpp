@@ -305,6 +305,11 @@ private:
                 theTree->leafDisk.write(this,this->position);
                 return;
             }
+#ifdef debug
+            if(this->position == -1){
+                cerr << "bug is in leafNode deleteElement ^ 2" << endl;
+            }
+#endif
             if(this->askLeft(theTree)) return;
             if(this->askRight(theTree)) return;
             theTree->leafDisk.write(this,this->position);
