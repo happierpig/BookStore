@@ -10,7 +10,7 @@
 #include <cstring>
 #include <vector>
 //#include "vector.hpp"
-#define debug // using Xiatian's debug method
+//#define debug // using Xiatian's debug method
 
 using std::string;
 //using sjtu::vector;
@@ -223,7 +223,6 @@ private:
                     theTree->leafDisk.write(tmprr,tmprr->position);
                 }
                 theTree->leafDisk.write(leftBro,leftBro->position);
-                theTree->leafDisk.erase(this->position);
                 // deleteElement int fatherNode including writing back into document
                 Node * fatherNode = theTree->nodeDisk.read(this->father);
                 // bug is here :: this->position == -1
@@ -233,6 +232,7 @@ private:
                     this->show();
                 }
 #endif
+                theTree->leafDisk.erase(this->position);
                 int pos = fatherNode->findKeyPos(leftBro->position);
                 fatherNode->deleteElement(pos,theTree);
             }
