@@ -93,6 +93,9 @@ private:
             --dataSize;
             _target->before->after = _target->after;
             _target->after->before = _target->before;
+            if(_target->position != -1){
+                this->write_back(_target->position,_target->data);
+            }
             delete _target;
         }
         void clear(){
@@ -195,11 +198,10 @@ public:
             return temp;
         }
     }
-    void write(const T & data,int position){
+    void write(const T * data,int position){
+        if(position == -1) std::cerr << "negative position" << std::endl;
         if(assistantMap.exist(position)){
-            typename List::Node * tmp = assistantMap.find(position);
-            cache.update(tmp);
-            *tmp->data = data;
+            cache.update(assistantMap.find(position));
         }else {
             if (file.fail()) {
                 file.clear();
@@ -207,21 +209,21 @@ public:
                 file.open(fileName, ios::in | ios::out | ios::binary);
             }
             file.seekp(position, ios::beg);
-            file.write(reinterpret_cast<const char *>(&data), sizeof(data));
+            file.write(reinterpret_cast<const char *>(data), sizeof(*data));
         }
     }
-    T & read(int index) {
+    T * read(int index) {
         if(assistantMap.exist(index)){
             typename List::Node * tmp = assistantMap.find(index);
             cache.update(tmp);
-            return *tmp->data;
+            return tmp->data;
         }else {
             T temp;
             file.seekp(index, ios::beg);
             file.read(reinterpret_cast< char *>(&temp), sizeof(temp));
             typename List::Node * tmp = cache.insert(index,temp);
             assistantMap.insert(index,tmp);
-            return *tmp->data;
+            return tmp->data;
         }
     }
 
@@ -277,3 +279,4 @@ public:
 
 };
 #endif //TRAIN_TICKET_DISKMANAGER_HPP
+
