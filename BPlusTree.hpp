@@ -10,7 +10,7 @@
 #include <cstring>
 #include <vector>
 //#include "vector.hpp"
-//#define debug // using Xiatian's debug method
+#define debug // using Xiatian's debug method
 
 using std::string;
 //using sjtu::vector;
@@ -221,6 +221,11 @@ private:
                 theTree->leafDisk.erase(this->position);
                 // deleteElement int fatherNode including writing back into document
                 Node * fatherNode = theTree->nodeDisk.read(this->father);
+#ifdef debug
+                if(fatherNode->position == -1){
+                    cerr << "location in leafNode askLeft" << endl;
+                }
+#endif
                 int pos = fatherNode->findKeyPos(leftBro->position);
                 fatherNode->deleteElement(pos,theTree);
             }
@@ -265,6 +270,11 @@ private:
                 theTree->leafDisk.erase(rightBro->position);
                 // deleteElement int fatherNode including writing back into document
                 Node * fatherNode = theTree->nodeDisk.read(this->father);
+#ifdef debug
+                if(fatherNode->position == -1){
+                    cerr << "location in leafNode askLeft" << endl;
+                }
+#endif
                 int pos = fatherNode->findKeyPos(this->position);
                 fatherNode->deleteElement(pos,theTree);
             }
@@ -423,6 +433,11 @@ private:
             }else{ // merge two nodes
                 // update father node in the end
                 Node * fatherNode = theTree->nodeDisk.read(this->father);
+#ifdef debug
+                if(fatherNode->position == -1){
+                    cerr << "location in internalNode askLeft" << endl;
+                }
+#endif
                 int keyPos = fatherNode->findKeyPos(leftBro->position);
                 Key downKey = fatherNode->nodeKey[keyPos];
                 // merge two into one
@@ -495,6 +510,11 @@ private:
                 // update father node in the end
                 Node * fatherNode = theTree->nodeDisk.read(this->father);
                 int keyPos = fatherNode->findKeyPos(this->position);
+#ifdef debug
+                if(fatherNode->position == -1){
+                    cerr << "location in internalNode askRight" << endl;
+                }
+#endif
                 Key downKey = fatherNode->nodeKey[keyPos];
                 // merge two into one
                 this->nodeKey[this->childSize-1] = downKey;
@@ -529,7 +549,6 @@ private:
             return true;
         }
         void deleteElement(int keyPos,BPlusTree * theTree){
-            if(this->position == -1) return;
 #ifdef debug
             if(this->position == -1) {
                 cerr << "debug location" << endl;
