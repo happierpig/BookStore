@@ -224,6 +224,7 @@ private:
 #ifdef debug
                 if(fatherNode->position == -1){
                     cerr << "location in leafNode askLeft" << endl;
+                    this->show();
                 }
 #endif
                 int pos = fatherNode->findKeyPos(leftBro->position);
@@ -306,17 +307,17 @@ private:
 #ifdef debug
 
         void show() const {
-                cout << "[leafNode]" << endl;
-                cout << "position: " << position << endl;
-                cout << "father: " << father << endl;
-                cout << "leftBrother: " << leftBrother << endl;
-                cout << "rightBrother: " << rightBrother << endl;
-                cout << "dataSize: " << dataSize << endl;
-                cout << "leafKey & leafData:" << endl;
+                cerr << "[leafNode]" << endl;
+                cerr << "position: " << position << endl;
+                cerr << "father: " << father << endl;
+                cerr << "leftBrother: " << leftBrother << endl;
+                cerr << "rightBrother: " << rightBrother << endl;
+                cerr << "dataSize: " << dataSize << endl;
+                cerr << "leafKey & leafData:" << endl;
                 for (int i = 0; i < dataSize; i++) {
-                    cout << "leafKey: " << dataKey[i] << "\t\t\t\t\t\t\t\t\t\t\t" << "leafData: " << dataSet[i] << endl;
+                    cerr << "leafKey: " << dataKey[i] << "\t\t\t\t\t\t\t\t\t\t\t" << "leafData: " << dataSet[i] << endl;
                 }
-                cout << endl;
+                cerr << endl;
         }
 #endif
 
