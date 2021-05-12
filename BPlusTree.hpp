@@ -227,12 +227,12 @@ private:
                 // deleteElement int fatherNode including writing back into document
                 Node * fatherNode = theTree->nodeDisk.read(this->father);
                 // bug is here :: this->position == -1
-//#ifdef debug
-//                if(fatherNode->position == -1){
-//                    cerr << "location in leafNode askLeft" << endl;
-//                    this->show();
-//                }
-//#endif
+#ifdef debug
+                if(fatherNode->position == -1){
+                    cerr << "location in leafNode askLeft" << endl;
+                    this->show();
+                }
+#endif
                 int pos = fatherNode->findKeyPos(leftBro->position);
                 fatherNode->deleteElement(pos,theTree);
             }
