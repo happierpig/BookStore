@@ -19,8 +19,6 @@ using myFunctions::upper_bound;
 using myFunctions::lower_bound;
 using std::cout;
 using std::endl;
-using std::cerr;
-
 struct Key{
     char key[100];
     Key(){
@@ -64,7 +62,7 @@ struct Key{
     }
 };
 
-template <class Key,class Data,int M = 200,int L = 250>
+template <class Key,class Data,int M = 200,int L = 200>
 class BPlusTree{
 private:
     class basicInfo{
@@ -183,11 +181,6 @@ private:
             }
         }
         bool askLeft(BPlusTree * theTree){
-#ifdef debug
-            if(this->position == -1){
-                cerr << "bug is here in leafNode askLeft head" << endl;
-            }
-#endif
             if(this->leftBrother == -1) return false;
             leafNode * leftBro = theTree->leafDisk.read(this->leftBrother);
             if(leftBro->father != this->father) return false;
@@ -225,13 +218,6 @@ private:
                 theTree->leafDisk.write(leftBro,leftBro->position);
                 // deleteElement int fatherNode including writing back into document
                 Node * fatherNode = theTree->nodeDisk.read(this->father);
-                // bug is here :: this->position == -1
-#ifdef debug
-                if(fatherNode->position == -1){
-                    cerr << "location in leafNode askLeft" << endl;
-                    this->show();
-                }
-#endif
                 theTree->leafDisk.erase(this->position);
                 int pos = fatherNode->findKeyPos(leftBro->position);
                 fatherNode->deleteElement(pos,theTree);
@@ -277,22 +263,12 @@ private:
                 theTree->leafDisk.erase(rightBro->position);
                 // deleteElement int fatherNode including writing back into document
                 Node * fatherNode = theTree->nodeDisk.read(this->father);
-#ifdef debug
-                if(fatherNode->position == -1){
-                    cerr << "location in leafNode askLeft" << endl;
-                }
-#endif
                 int pos = fatherNode->findKeyPos(this->position);
                 fatherNode->deleteElement(pos,theTree);
             }
             return true;
         }
         void deleteElement(int keyPos,BPlusTree * theTree){
-#ifdef debug
-            if(this->position == -1){
-                cerr << "bug is in leafNode deleteElement" << endl;
-            }
-#endif
             for(int i = keyPos;i < dataSize - 1;++i){
                 dataKey[i] = dataKey[i+1];
                 dataSet[i] = dataSet[i+1];
@@ -310,11 +286,6 @@ private:
                 theTree->leafDisk.write(this,this->position);
                 return;
             }
-#ifdef debug
-            if(this->position == -1){
-                cerr << "bug is in leafNode deleteElement ^ 2" << endl;
-            }
-#endif
             if(this->askLeft(theTree)) return;
             if(this->askRight(theTree)) return;
             theTree->leafDisk.write(this,this->position);
@@ -323,17 +294,17 @@ private:
 #ifdef debug
 
         void show() const {
-                cerr << "[leafNode]" << endl;
-                cerr << "position: " << position << endl;
-                cerr << "father: " << father << endl;
-                cerr << "leftBrother: " << leftBrother << endl;
-                cerr << "rightBrother: " << rightBrother << endl;
-                cerr << "dataSize: " << dataSize << endl;
-                cerr << "leafKey & leafData:" << endl;
+                cout << "[leafNode]" << endl;
+                cout << "position: " << position << endl;
+                cout << "father: " << father << endl;
+                cout << "leftBrother: " << leftBrother << endl;
+                cout << "rightBrother: " << rightBrother << endl;
+                cout << "dataSize: " << dataSize << endl;
+                cout << "leafKey & leafData:" << endl;
                 for (int i = 0; i < dataSize; i++) {
-                    cerr << "leafKey: " << dataKey[i] << "\t\t\t\t\t\t\t\t\t\t\t" << "leafData: " << dataSet[i] << endl;
+                    cout << "leafKey: " << dataKey[i] << "\t\t\t\t\t\t\t\t\t\t\t" << "leafData: " << dataSet[i] << endl;
                 }
-                cerr << endl;
+                cout << endl;
         }
 #endif
 
@@ -450,11 +421,6 @@ private:
             }else{ // merge two nodes
                 // update father node in the end
                 Node * fatherNode = theTree->nodeDisk.read(this->father);
-#ifdef debug
-                if(fatherNode->position == -1){
-                    cerr << "location in internalNode askLeft" << endl;
-                }
-#endif
                 int keyPos = fatherNode->findKeyPos(leftBro->position);
                 Key downKey = fatherNode->nodeKey[keyPos];
                 // merge two into one
@@ -485,11 +451,6 @@ private:
                 theTree->nodeDisk.write(leftBro,leftBro->position);
                 theTree->nodeDisk.erase(this->position);
                 // delete the element in father node
-#ifdef debug
-                if(fatherNode->position == -1){
-                    cerr << "location in internalNode askLeft ^ 2" << endl;
-                }
-#endif
                 fatherNode->deleteElement(keyPos,theTree);
             }
             return true;
@@ -532,11 +493,6 @@ private:
                 // update father node in the end
                 Node * fatherNode = theTree->nodeDisk.read(this->father);
                 int keyPos = fatherNode->findKeyPos(this->position);
-#ifdef debug
-                if(fatherNode->position == -1){
-                    cerr << "location in internalNode askRight" << endl;
-                }
-#endif
                 Key downKey = fatherNode->nodeKey[keyPos];
                 // merge two into one
                 this->nodeKey[this->childSize-1] = downKey;
@@ -566,21 +522,11 @@ private:
                 theTree->nodeDisk.write(this,this->position);
                 theTree->nodeDisk.erase(rightBro->position);
                 // delete the element in father node
-#ifdef debug
-                if(fatherNode->position == -1){
-                    cerr << "location in internalNode askRight ^ 2" << endl;
-                }
-#endif
                 fatherNode->deleteElement(keyPos,theTree);
             }
             return true;
         }
         void deleteElement(int keyPos,BPlusTree * theTree){
-#ifdef debug
-            if(this->position == -1) {
-                cerr << "debug location" << endl;
-            }
-#endif
             for(int i = keyPos;i < childSize - 2;++i){
                 this->nodeKey[i] = this->nodeKey[i+1];
             }
@@ -613,28 +559,26 @@ private:
             for(int i = 0; i < this->childSize;++i){
                 if(this->childPosition[i] == sonPos) return i;
             }
-#ifdef debug
-            std::cerr << "can not find the position" << std::endl;
-            this->show();
-#endif
+            std::cerr << "can not find the position";
         }
 #ifdef debug
 
         void show() const {
-            cerr << "[internalNode]" << endl;
-            cerr << "position: " << position << endl;
-            cerr << "father: " << father << endl;
-            cerr << "leftBrother: " << leftBrother << endl;
-            cerr << "rightBrother: " << rightBrother << endl;
-            cerr << (childIsLeaf ? "child node is leaf" : "child node is internal") << endl;
-            cerr << "childSize: " << childSize << endl;
-            cerr << "nodeKey & childPosition:" << endl;
+            cout << "[internalNode]" << endl;
+            cout << "position: " << position << endl;
+            cout << "father: " << father << endl;
+            cout << "leftBrother: " << leftBrother << endl;
+            cout << "rightBrother: " << rightBrother << endl;
+            cout << (childIsLeaf ? "child node is leaf" : "child node is internal") << endl;
+            cout << "childSize: " << childSize << endl;
+            cout << "nodeKey & childPosition:" << endl;
             for (int i = 0; i < childSize - 1; i++) {
-                cerr <<  "childNode: " << childPosition[i] << endl;
-                cerr << "nodeKey: " << nodeKey[i] << endl;
+                cout <<  "childNode: " << childPosition[i] << endl;
+                cout << "nodeKey: " << nodeKey[i] << endl;
             }
-            cerr  << "childNode: " << childPosition[childSize-1] << endl;
-            cerr << endl;
+            cout  << "childNode: " << childPosition[childSize-1] << endl;
+            cout << endl;
+
         }
 
 #endif
@@ -685,74 +629,74 @@ private:
 public:
     // interfaces for my B+Tree
     BPlusTree() = delete;
-        explicit BPlusTree(const string & _name):leafDisk(_name + "_leaf.dat",113),nodeDisk(_name + "_node.dat",113){
-            treeInfo = nodeDisk.tellInfo();
+    explicit BPlusTree(const string & _name):leafDisk(_name + "_leaf.dat",131),nodeDisk(_name + "_node.dat",131){
+        treeInfo = nodeDisk.tellInfo();
+    }
+    ~BPlusTree(){
+        nodeDisk.setInfo(treeInfo);
+    }
+    int size() const{
+        return treeInfo.size;
+    }
+    bool empty() const{
+        return treeInfo.size == 0;
+    }
+    //parameter: the key and  the data object itself
+    void insert(const Key & _key,const Data & _data){
+        treeInfo.size++;
+        if(treeInfo.root == -1) createRoot(_key,_data);
+        else{
+            int leafPos = findLeaf(_key);
+            leafNode * tmpLeaf = leafDisk.read(leafPos);
+            tmpLeaf->addElement(_key,_data,this);
         }
-        ~BPlusTree(){
-            nodeDisk.setInfo(treeInfo);
-        }
-        int size() const{
-            return treeInfo.size;
-        }
-        bool empty() const{
-            return treeInfo.size == 0;
-        }
-        //parameter: the key and  the data object itself
-        void insert(const Key & _key,const Data & _data){
-            treeInfo.size++;
-            if(treeInfo.root == -1) createRoot(_key,_data);
-            else{
-                int leafPos = findLeaf(_key);
-                leafNode * tmpLeaf = leafDisk.read(leafPos);
-                tmpLeaf->addElement(_key,_data,this);
-            }
-        }
-        // delete the specific data with the key
-        bool erase(const Key & _key,const Data & _data){
-            if(treeInfo.root == -1) return false;
-            int leafPos = -1,keyPos = -1;
-            int leafPosition = findLeaf(_key);
-            leafNode * tmpLeafNode = leafDisk.read(leafPosition);
-            tmpLeafNode->eraseAssistant(_key,_data,this,true,true,leafPos,keyPos);
-            if(leafPos == -1) return false;
-            if(treeInfo.size == 1){
-                this->clear();
-                return true;
-            }
-            leafNode * targetLeafNode = leafDisk.read(leafPos);
-            targetLeafNode->deleteElement(keyPos,this);
-            --treeInfo.size;
+    }
+    // delete the specific data with the key
+    bool erase(const Key & _key,const Data & _data){
+        if(treeInfo.root == -1) return false;
+        int leafPos = -1,keyPos = -1;
+        int leafPosition = findLeaf(_key);
+        leafNode * tmpLeafNode = leafDisk.read(leafPosition);
+        tmpLeafNode->eraseAssistant(_key,_data,this,true,true,leafPos,keyPos);
+        if(leafPos == -1) return false;
+        if(treeInfo.size == 1){
+            this->clear();
             return true;
         }
-        // find all data associated with the key
-        void find(const Key & _key,vector<Data> & vec_ans){
-            if(treeInfo.root == -1) return;
-            int leafPosition = findLeaf(_key);
-            leafNode * tmpLeafNode = leafDisk.read(leafPosition);
-            tmpLeafNode->findElement(_key,vec_ans,this,true,true);
-        }
-        // delete all data and reset the document
-        void clear(){
-            leafDisk.clear();
-            nodeDisk.clear();
-            treeInfo.root = -1;
-            treeInfo.head = -1;
-            treeInfo.size = 0;
-        }
-        void findAll(vector<Data> & vec_ans){
-            if(treeInfo.root == -1 || treeInfo.head == -1) return;
-            int ptr = treeInfo.head;
-            while(true){
-                leafNode * tmpNode = this->leafDisk.read(ptr);
-                for(int i = 0;i < tmpNode->dataSize;++i){
-                    vec_ans.push_back(tmpNode->dataSet[i]);
-                }
-                if(tmpNode->rightBrother == -1) break;
-                ptr = tmpNode->rightBrother;
+        leafNode * targetLeafNode = leafDisk.read(leafPos);
+        targetLeafNode->deleteElement(keyPos,this);
+        --treeInfo.size;
+        return true;
+    }
+    // find all data associated with the key
+    void find(const Key & _key,vector<Data> & vec_ans){
+        if(treeInfo.root == -1) return;
+        int leafPosition = findLeaf(_key);
+        leafNode * tmpLeafNode = leafDisk.read(leafPosition);
+        tmpLeafNode->findElement(_key,vec_ans,this,true,true);
+    }
+    // delete all data and reset the document
+    void clear(){
+        leafDisk.clear();
+        nodeDisk.clear();
+        treeInfo.root = -1;
+        treeInfo.head = -1;
+        treeInfo.size = 0;
+    }
+    void findAll(vector<Data> & vec_ans){
+        if(treeInfo.root == -1 || treeInfo.head == -1) return;
+        int ptr = treeInfo.head;
+        while(true){
+            leafNode * tmpNode = this->leafDisk.read(ptr);
+            for(int i = 0;i < tmpNode->dataSize;++i){
+                vec_ans.push_back(tmpNode->dataSet[i]);
             }
+            if(tmpNode->rightBrother == -1) break;
+            ptr = tmpNode->rightBrother;
         }
+    }
 #ifdef debug
-        private:
+    private:
     void show(int offset, bool isLeaf)  {
         cout << "[pos] " << offset << endl;
         if (isLeaf) {
@@ -791,8 +735,7 @@ public:
     }
 
 #endif
-    };
+};
 
 
 #endif //TRAIN_TICKET_BPLUSTREE_HPP
-
