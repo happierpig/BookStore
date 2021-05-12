@@ -63,7 +63,7 @@ struct Key{
     }
 };
 
-template <class Key,class Data,int M = 200,int L = 200>
+template <class Key,class Data,int M = 150,int L = 250>
 class BPlusTree{
 private:
     class basicInfo{
@@ -630,7 +630,7 @@ private:
 public:
     // interfaces for my B+Tree
     BPlusTree() = delete;
-    explicit BPlusTree(const string & _name):leafDisk(_name + "_leaf.dat",131),nodeDisk(_name + "_node.dat",131){
+    explicit BPlusTree(const string & _name):leafDisk(_name + "_leaf.dat",37),nodeDisk(_name + "_node.dat",37){
         treeInfo = nodeDisk.tellInfo();
     }
     ~BPlusTree(){
