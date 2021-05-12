@@ -27,9 +27,10 @@ private:
             Node * after;
             T * data;
             int position;
+            bool occupy;
             Node() = delete;
-            Node(Node * _bef,Node * _aft,const T & _data,int _pos):before(_bef),after(_aft),data(new T(_data)),position(_pos){}
-            Node(Node * _bef,Node * _aft):before(_bef),after(_aft),data(nullptr),position(-1){}
+            Node(Node * _bef,Node * _aft,const T & _data,int _pos):before(_bef),after(_aft),data(new T(_data)),position(_pos),occupy(false){}
+            Node(Node * _bef,Node * _aft):before(_bef),after(_aft),data(nullptr),position(-1),occupy(false){}
             ~Node(){
                 delete data;
             }
@@ -45,6 +46,11 @@ private:
         }
         void pop_back(){
             Node * tmp = tail->before;
+            if(tmp->occupy){
+                this->update(tmp);
+                this->pop_back();
+                return;
+            }
             this->write_back(tmp->position,tmp->data);
             tmp->before->after = tmp->after;
             tmp->after->before = tmp->before;
@@ -198,7 +204,8 @@ public:
     void write(const T * data,int position){
         if(position == -1) std::cerr << "negative position" << std::endl;
         if(assistantMap.exist(position)){
-            cache.update(assistantMap.find(position));
+            typename List::Node * tmp = assistantMap.find(index);
+            tmp->occupy = false;
         }else {
             if (file.fail()) {
                 file.clear();
@@ -213,6 +220,7 @@ public:
         if(assistantMap.exist(index)){
             typename List::Node * tmp = assistantMap.find(index);
             cache.update(tmp);
+            tmp->occupy = true;
             return tmp->data;
         }else {
             T temp;
@@ -220,6 +228,7 @@ public:
             file.read(reinterpret_cast< char *>(&temp), sizeof(temp));
             typename List::Node * tmp = cache.insert(index,temp);
             assistantMap.insert(index,tmp);
+            tmp->occupy = true;
             return tmp->data;
         }
     }
