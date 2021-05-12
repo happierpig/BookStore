@@ -204,7 +204,7 @@ public:
     void write(const T * data,int position){
         if(position == -1) std::cerr << "negative position" << std::endl;
         if(assistantMap.exist(position)){
-            typename List::Node * tmp = assistantMap.find(index);
+            typename List::Node * tmp = assistantMap.find(position);
             tmp->occupy = false;
         }else {
             if (file.fail()) {
