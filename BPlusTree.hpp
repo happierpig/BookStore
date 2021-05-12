@@ -19,6 +19,7 @@ using myFunctions::upper_bound;
 using myFunctions::lower_bound;
 using std::cout;
 using std::endl;
+
 struct Key{
     char key[100];
     Key(){
@@ -61,7 +62,6 @@ struct Key{
         return os;
     }
 };
-
 template <class Key,class Data,int M = 200,int L = 200>
 class BPlusTree{
 private:
@@ -463,10 +463,10 @@ private:
                 // update father node
                 Node * fatherNode = theTree->nodeDisk.read(this->father);
                 int keyPos = fatherNode->findKeyPos(this->position);
-                fatherNode->nodeKey[keyPos] = rightBro->nodeKey[1];
+                this->nodeKey[this->childSize-1] = fatherNode->nodeKey[keyPos];
+                fatherNode->nodeKey[keyPos] = rightBro->nodeKey[0];
                 theTree->nodeDisk.write(fatherNode,fatherNode->position);
                 // update *this
-                this->nodeKey[this->childSize-1] = rightBro->nodeKey[0];
                 this->childPosition[this->childSize] = rightBro->childPosition[0];
                 ++this->childSize;
                 theTree->nodeDisk.write(this,this->position);
@@ -614,7 +614,6 @@ private:
         leafDisk.write(newLeafNode);
     }
     int findLeaf(const Key & _key){
-//        if(treeInfo.root == -1) error("树为空");
         rekeyPos.clear();
         Node * tmpNode = nodeDisk.read(this->treeInfo.root);
         while(!tmpNode->childIsLeaf){
