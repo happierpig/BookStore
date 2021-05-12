@@ -183,6 +183,11 @@ private:
             }
         }
         bool askLeft(BPlusTree * theTree){
+#ifdef debug
+            if(this->position == -1){
+                cerr << "bug is here in leafNode askLeft head" << endl;
+            }
+#endif
             if(this->leftBrother == -1) return false;
             leafNode * leftBro = theTree->leafDisk.read(this->leftBrother);
             if(leftBro->father != this->father) return false;
