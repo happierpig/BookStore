@@ -221,12 +221,13 @@ private:
                 theTree->leafDisk.erase(this->position);
                 // deleteElement int fatherNode including writing back into document
                 Node * fatherNode = theTree->nodeDisk.read(this->father);
-#ifdef debug
-                if(fatherNode->position == -1){
-                    cerr << "location in leafNode askLeft" << endl;
-                    this->show();
-                }
-#endif
+                // bug is here :: this->position == -1
+//#ifdef debug
+//                if(fatherNode->position == -1){
+//                    cerr << "location in leafNode askLeft" << endl;
+//                    this->show();
+//                }
+//#endif
                 int pos = fatherNode->findKeyPos(leftBro->position);
                 fatherNode->deleteElement(pos,theTree);
             }
@@ -282,6 +283,11 @@ private:
             return true;
         }
         void deleteElement(int keyPos,BPlusTree * theTree){
+#ifdef debug
+            if(this->position == -1){
+                cerr << "bug is in leafNode deleteElement" << endl;
+            }
+#endif
             for(int i = keyPos;i < dataSize - 1;++i){
                 dataKey[i] = dataKey[i+1];
                 dataSet[i] = dataSet[i+1];
