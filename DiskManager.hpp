@@ -94,6 +94,7 @@ private:
             _target->before->after = _target->after;
             _target->after->before = _target->before;
             if(_target->position != -1){
+                theDisk->file.open(theDisk->fileName,ios::in | ios::out | ios::binary);
                 this->write_back(_target->position,_target->data);
             }
             delete _target;
