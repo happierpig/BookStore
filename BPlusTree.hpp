@@ -10,7 +10,7 @@
 #include <cstring>
 #include <vector>
 //#include "vector.hpp"
-//#define debug // using Xiatian's debug method
+#define debug // using Xiatian's debug method
 
 using std::string;
 //using sjtu::vector;
@@ -19,7 +19,7 @@ using myFunctions::upper_bound;
 using myFunctions::lower_bound;
 using std::cout;
 using std::endl;
-
+using std::cerr;
 
 struct Key{
     char key[100];
@@ -561,26 +561,26 @@ private:
             for(int i = 0; i < this->childSize;++i){
                 if(this->childPosition[i] == sonPos) return i;
             }
-            std::cerr << "can not find the position";
+            std::cerr << "can not find the position" << std::endl;
+            this->show();
         }
 #ifdef debug
 
         void show() const {
-            cout << "[internalNode]" << endl;
-            cout << "position: " << position << endl;
-            cout << "father: " << father << endl;
-            cout << "leftBrother: " << leftBrother << endl;
-            cout << "rightBrother: " << rightBrother << endl;
-            cout << (childIsLeaf ? "child node is leaf" : "child node is internal") << endl;
-            cout << "childSize: " << childSize << endl;
-            cout << "nodeKey & childPosition:" << endl;
+            cerr << "[internalNode]" << endl;
+            cerr << "position: " << position << endl;
+            cerr << "father: " << father << endl;
+            cerr << "leftBrother: " << leftBrother << endl;
+            cerr << "rightBrother: " << rightBrother << endl;
+            cerr << (childIsLeaf ? "child node is leaf" : "child node is internal") << endl;
+            cerr << "childSize: " << childSize << endl;
+            cerr << "nodeKey & childPosition:" << endl;
             for (int i = 0; i < childSize - 1; i++) {
-                cout <<  "childNode: " << childPosition[i] << endl;
-                cout << "nodeKey: " << nodeKey[i] << endl;
+                cerr <<  "childNode: " << childPosition[i] << endl;
+                cerr << "nodeKey: " << nodeKey[i] << endl;
             }
-            cout  << "childNode: " << childPosition[childSize-1] << endl;
-            cout << endl;
-
+            cerr  << "childNode: " << childPosition[childSize-1] << endl;
+            cerr << endl;
         }
 
 #endif
@@ -652,11 +652,6 @@ public:
                 leafNode * tmpLeaf = leafDisk.read(leafPos);
                 tmpLeaf->addElement(_key,_data,this);
             }
-#ifdef debug
-            std::cout << "insert key : " << _key << " _data : " << _data << "below -------" << std::endl;
-        nodeDisk.show();
-        leafDisk.show();
-#endif
         }
         // delete the specific data with the key
         bool erase(const Key & _key,const Data & _data){
@@ -673,11 +668,6 @@ public:
             leafNode * targetLeafNode = leafDisk.read(leafPos);
             targetLeafNode->deleteElement(keyPos,this);
             --treeInfo.size;
-#ifdef debug
-            std::cout << "erase key : " << _key << " _data : " << _data << "below -------" << std::endl;
-        nodeDisk.show();
-        leafDisk.show();
-#endif
             return true;
         }
         // find all data associated with the key
